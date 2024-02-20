@@ -55,22 +55,71 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                 dataCtaCorrProv_Detracciones[key]['importe_bruto_me'] = parseFloat(value['importe_bruto_me']);
             });
 
-            // Agregar JSON de pagos
+            // Agregar JSON vacios
             dataCtaCorrProv.forEach((valueCCP, keyCCP) => {
                 dataCtaCorrProv[keyCCP]['pagos'] = dataCtaCorrProv[keyCCP]['pagos'] || {};
                 dataCtaCorrProv[keyCCP]['pagos']['detracciones'] = dataCtaCorrProv[keyCCP]['pagos']['detracciones'] || [];
+                dataCtaCorrProv[keyCCP]['cuentas_contables'] = dataCtaCorrProv[keyCCP]['cuentas_contables'] || {};
+                dataCtaCorrProv[keyCCP]['cuentas_contables']['42219111_detracciones'] = dataCtaCorrProv[keyCCP]['cuentas_contables']['42219111_detracciones'] || [];
             });
 
-            // Agregar pago de detracciones
+            /****************** DETRACCIONES ******************/
+            // Recorrer documentos
             dataCtaCorrProv.forEach((valueCCP, keyCCP) => {
+
+                // Declarar variables
+                dataCtaCorrProv[keyCCP]['es_detraccion'] = 'F';
+
+                // Recorrer documentos con detracciones
                 dataCtaCorrProv_Detracciones.forEach((valueCCPD, keyCCPD) => {
+
+                    // Validar los ID interno
                     if (valueCCP.id_interno == valueCCPD.id_interno) {
 
-                        // Agregamos data de detraccion
-                        dataCtaCorrProv[keyCCP]['pagos']['detracciones'].push({
-                            numero_documento: valueCCPD.numero_documento,
-                            importe_detraccion_me: valueCCPD.importe_bruto_me
-                        })
+                        // Validar que tenga detraccion
+                        // En la busqueda filtramos por la cuenta 42219111 que es la cuenta de detracciones
+                        // Esto es un flag adicional, ademas nos sirve para obtener un unico importe referente a la detraccion
+                        if (valueCCPD.custcol_4601_witaxline == 'T') {
+
+                            // Agregar data de detracciones
+                            dataCtaCorrProv[keyCCP]['pagos']['detracciones'].push({
+                                numero_documento: valueCCPD.numero_documento,
+                                importe_detraccion_me: valueCCPD.importe_bruto_me
+                            })
+                            dataCtaCorrProv[keyCCP]['es_detraccion'] = 'T';
+                        }
+                    }
+                });
+            });
+
+            // Recorrer documentos
+            dataCtaCorrProv.forEach((valueCCP, keyCCP) => {
+
+                // Declarar variables
+                dataCtaCorrProv[keyCCP]['es_autodetraccion'] = 'F';
+                let importe_total_cuenta_detracciones = 0;
+
+                // Recorrer documentos con detracciones
+                dataCtaCorrProv_Detracciones.forEach((valueCCPD, keyCCPD) => {
+
+                    // Validar los ID interno
+                    if (valueCCP.id_interno == valueCCPD.id_interno) {
+
+                        // Validar que tenga detraccion
+                        if (valueCCP.es_detraccion == 'T') {
+
+                            // Agregar data de detracciones
+                            dataCtaCorrProv[keyCCP]['cuentas_contables']['42219111_detracciones'].push({
+                                numero_documento: valueCCPD.numero_documento,
+                                importe_detraccion_me: valueCCPD.importe_bruto_me
+                            })
+
+                            // Verificar si es autodetraccion
+                            importe_total_cuenta_detracciones += valueCCPD.importe_bruto_me;
+                            if (importe_total_cuenta_detracciones == 0) {
+                                dataCtaCorrProv[keyCCP]['es_autodetraccion'] = 'T';
+                            }
+                        }
                     }
                 });
             });
@@ -83,13 +132,16 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
 
                 if (value.tipo.codigo == 'VendBill') { // Es Factura de compra
 
-                    if (value.ns_porcentaje_detraccion) { // Tiene aplicada detraccion
+                    if (value.ns_porcentaje_detraccion > 0) { // Tiene aplicada detraccion
 
-                        dataCtaCorrProv[key]['importe_bruto_me'] = value['importe_bruto_me'] + importe_detraccion;
+                        if (value.es_autodetraccion == 'F') { // No es autodetraccion
 
-                        if (value.ns_numero_detraccion) { // Tiene detraccion pagada
+                            dataCtaCorrProv[key]['importe_bruto_me'] = value['importe_bruto_me'] + importe_detraccion;
 
-                            dataCtaCorrProv[key]['importe_pagado_me'] = value['importe_pagado_me'] + importe_detraccion;
+                            if (value.ns_numero_detraccion) { // Tiene detraccion pagada
+
+                                dataCtaCorrProv[key]['importe_pagado_me'] = value['importe_pagado_me'] + importe_detraccion;
+                            }
                         }
                     }
                 }

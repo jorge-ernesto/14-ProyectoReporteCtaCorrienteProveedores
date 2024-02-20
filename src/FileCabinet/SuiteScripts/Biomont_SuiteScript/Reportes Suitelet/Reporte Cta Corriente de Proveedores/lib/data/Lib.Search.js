@@ -89,9 +89,9 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 let moneda_nombre = node.getText(12);
                 let importe_bruto_me = node.getValue(13); // Importe bruto (moneda extranjera)
                 let importe_pagado_me = node.getValue(14); // Importe pagado (moneda extranjera)
-                let estado = node.getText(15);
-                let ns_porcentaje_detraccion = node.getValue(16);
-                let ns_numero_detraccion = node.getValue(17);
+                let estado = node.getText(15); // Estado
+                let ns_porcentaje_detraccion = node.getValue(16); // NS Porcentaje DET/RET
+                let ns_numero_detraccion = node.getValue(17); // NS Num. Deposito Detraccion
 
                 resultTransaction.push({
                     id_interno: id_interno,
@@ -132,6 +132,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.pushColumn({ name: "internalid", label: "Internal ID" });
             transactionQuery.pushColumn({ name: "tranid", label: "Número de documento" });
             transactionQuery.pushColumn({ name: "fxgrossamount", label: "Importe bruto (moneda extranjera)" });
+            transactionQuery.pushColumn({ name: "custcol_4601_witaxline", label: "Línea de impuesto de retención" });
 
             // Agregar filtros
             addFiltersCtaCorrProv(transactionQuery, params, 'search_ctaCorrProv_Detracciones');
@@ -148,11 +149,13 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 let id_interno = node.getValue(0);
                 let numero_documento = node.getValue(1);
                 let importe_bruto_me = node.getValue(2); // Importe bruto (moneda extranjera)
+                let custcol_4601_witaxline = node.getValue(3); // Línea de impuesto de retención
 
                 resultTransaction.push({
                     id_interno: id_interno,
                     numero_documento: numero_documento,
-                    importe_bruto_me: importe_bruto_me
+                    importe_bruto_me: importe_bruto_me,
+                    custcol_4601_witaxline: custcol_4601_witaxline
                 });
             });
 
@@ -191,8 +194,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                     ["mainline", "any", ""],
                     "AND",
                     [
-                        [["type", "anyof", "VendBill"], "AND", ["account.number", "startswith", "42"]], "OR",
-                        [["type", "anyof", "Custom122"], "AND", ["account.number", "startswith", "42"], "AND", ["creditamount", "greaterthan", "0.00"]]
+                        [["type", "anyof", "VendBill"], "AND", ["account.number", "startswith", "42"]]
                     ],
                     "AND",
                     ["grossamount", "notequalto", "0.00"],
@@ -202,7 +204,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
 
                 // Filtro para mostrar solo las detracciones
                 filters.push('AND')
-                filters.push(['custcol_4601_witaxline', 'is', 'T'])
+                filters.push(['account.number', 'is', '42219111'])
             }
 
             // Agregar filtros adicionales (Filtran sobre lo que ya se especifico en "Agregar filtros")
