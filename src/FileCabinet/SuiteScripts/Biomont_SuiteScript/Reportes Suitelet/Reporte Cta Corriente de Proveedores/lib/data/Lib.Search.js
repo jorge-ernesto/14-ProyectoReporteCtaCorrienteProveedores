@@ -23,7 +23,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.pushColumn({
                 name: "number",
                 join: "account",
-                sort: search.Sort.ASC,
+                // sort: search.Sort.ASC,
                 label: "CUENTA (NUMERO)"
             });
             transactionQuery.pushColumn({
@@ -40,19 +40,24 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.pushColumn({ name: "datecreated", label: "FECHA DE REGISTRO" });
             transactionQuery.pushColumn({
                 name: "trandate",
-                sort: search.Sort.ASC,
+                // sort: search.Sort.ASC,
                 label: "FECHA DE EMISION"
             });
             transactionQuery.pushColumn({
                 name: "formuladate",
                 formula: "NVL({duedate}, {custbody_ns_lt_fech_venc})",
+                sort: search.Sort.ASC,
                 label: "FECHA DE VENCIMIENTO"
             });
             transactionQuery.pushColumn({ name: "type", label: "Tipo" });
             transactionQuery.pushColumn({ name: "typecode", label: "Código de tipo" });
             transactionQuery.pushColumn({ name: "custbody_ns_document_type", label: "NS Tipo de Documento" });
             transactionQuery.pushColumn({ name: "tranid", label: "Número de documento" });
-            transactionQuery.pushColumn({ name: "currency", label: "Moneda" });
+            transactionQuery.pushColumn({
+                name: "currency",
+                sort: search.Sort.ASC,
+                label: "Moneda"
+            });
             transactionQuery.pushColumn({ name: "fxgrossamount", label: "Importe bruto (moneda extranjera)" });
             transactionQuery.pushColumn({ name: "fxamountpaid", label: "Importe pagado (moneda extranjera)" });
             transactionQuery.pushColumn({ name: "statusref", label: "Estado" });

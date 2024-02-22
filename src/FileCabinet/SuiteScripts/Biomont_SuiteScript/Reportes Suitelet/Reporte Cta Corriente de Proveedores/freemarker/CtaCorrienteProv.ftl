@@ -238,7 +238,7 @@
             </Row>
 
             <!-- Inicio de cuerpo (tabla) -->
-            <#list context.transactions as keyprov, proveedores>
+            <#list context.transactions.proveedores as keyprov, proveedores>
                 <Row>
                     <Cell ss:StyleID="t1" ss:MergeAcross="12">
                         <Data ss:Type="String">PROVEEDOR: ${keyprov}</Data>
@@ -287,21 +287,40 @@
                         </Cell>
                     </Row>
                 </#list>
+                <#list proveedores.totales as keymon, monedas>
+                    <Row>
+                        <Cell ss:StyleID="t1-totales" ss:MergeAcross="9">
+                            <Data ss:Type="String">TOTAL ${keymon}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-currency">
+                            <Data ss:Type="Number">${proveedores.totales[keymon].importe_bruto_me}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-currency">
+                            <Data ss:Type="Number">${proveedores.totales[keymon].importe_pagado_me}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-currency">
+                            <Data ss:Type="Number">${proveedores.totales[keymon].importe_saldo_me}</Data>
+                        </Cell>
+                    </Row>
+                </#list>
+                <Row>
+                </Row>
+            </#list>
+
+            <#list context.transactions.totales as keytot, totales>
                 <Row>
                     <Cell ss:StyleID="t1-totales" ss:MergeAcross="9">
-                        <Data ss:Type="String">TOTAL PROVEEDOR</Data>
+                        <Data ss:Type="String">TOTAL ${keytot}</Data>
                     </Cell>
                     <Cell ss:StyleID="t1-currency">
-                        <Data ss:Type="Number">${proveedores.totales.importe_bruto_me}</Data>
+                        <Data ss:Type="Number">${totales.importe_bruto_me}</Data>
                     </Cell>
                     <Cell ss:StyleID="t1-currency">
-                        <Data ss:Type="Number">${proveedores.totales.importe_pagado_me}</Data>
+                        <Data ss:Type="Number">${totales.importe_pagado_me}</Data>
                     </Cell>
                     <Cell ss:StyleID="t1-currency">
-                        <Data ss:Type="Number">${proveedores.totales.importe_saldo_me}</Data>
+                        <Data ss:Type="Number">${totales.importe_saldo_me}</Data>
                     </Cell>
-                </Row>
-                <Row>
                 </Row>
             </#list>
 

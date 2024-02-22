@@ -72,7 +72,7 @@
 
                     <!-- Inicio de cuerpo (tabla) -->
                     <tbody>
-                        <#list context.transactions as keyprov, proveedores>
+                        <#list context.transactions.proveedores as keyprov, proveedores>
                             <tr>
                                 <th colspan="13"><b>PROVEEDOR: ${keyprov}</b></th>
                             </tr>
@@ -93,14 +93,25 @@
                                     <td>${documentos.importe_saldo_me}</td>
                                 </tr>
                             </#list>
-                            <tr>
-                                <th class="right" colspan="10">TOTAL PROVEEDOR</th>
-                                <th>${proveedores.totales.importe_bruto_me}</th>
-                                <th>${proveedores.totales.importe_pagado_me}</th>
-                                <th>${proveedores.totales.importe_saldo_me}</th>
-                            </tr>
+                            <#list proveedores.totales as keymon, monedas>
+                                <tr>
+                                    <th class="right" colspan="10">TOTAL ${keymon}</th>
+                                    <th>${proveedores.totales[keymon].importe_bruto_me}</th>
+                                    <th>${proveedores.totales[keymon].importe_pagado_me}</th>
+                                    <th>${proveedores.totales[keymon].importe_saldo_me}</th>
+                                </tr>
+                            </#list>
                             <tr>
                                 <td class="right" colspan="13">&nbsp;</td>
+                            </tr>
+                        </#list>
+
+                        <#list context.transactions.totales as keytot, totales>
+                            <tr>
+                                <th class="right" colspan="10">TOTAL ${keytot}</th>
+                                <th>${totales.importe_bruto_me}</th>
+                                <th>${totales.importe_pagado_me}</th>
+                                <th>${totales.importe_saldo_me}</th>
                             </tr>
                         </#list>
                     </tbody>

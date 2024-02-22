@@ -16,22 +16,36 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                 let proveedor_ruc = element.proveedor.ruc;
                 let proveedor_nombre = element.proveedor.nombre;
                 let proveedor = proveedor_ruc.trim() + ' - ' + proveedor_nombre.trim();
+                let moneda = element.moneda.nombre;
 
                 // Agrupar data
-                dataAgrupada[proveedor] = dataAgrupada[proveedor] || {};
-                dataAgrupada[proveedor]['totales'] = dataAgrupada[proveedor]['totales'] || {};
-                dataAgrupada[proveedor]['detalle'] = dataAgrupada[proveedor]['detalle'] || [];
-                dataAgrupada[proveedor]['totales']['importe_bruto_me'] = dataAgrupada[proveedor]['totales']['importe_bruto_me'] || 0;
-                dataAgrupada[proveedor]['totales']['importe_pagado_me'] = dataAgrupada[proveedor]['totales']['importe_pagado_me'] || 0;
-                dataAgrupada[proveedor]['totales']['importe_saldo_me'] = dataAgrupada[proveedor]['totales']['importe_saldo_me'] || 0;
+                dataAgrupada['proveedores'] = dataAgrupada['proveedores'] || {};
+                dataAgrupada['proveedores'][proveedor] = dataAgrupada['proveedores'][proveedor] || {};
+                dataAgrupada['proveedores'][proveedor]['totales'] = dataAgrupada['proveedores'][proveedor]['totales'] || {};
+                dataAgrupada['proveedores'][proveedor]['detalle'] = dataAgrupada['proveedores'][proveedor]['detalle'] || [];
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda] = dataAgrupada['proveedores'][proveedor]['totales'][moneda] || {};
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_bruto_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_bruto_me'] || 0;
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_pagado_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_pagado_me'] || 0;
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_saldo_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_saldo_me'] || 0;
+                // Agrupara data
+                dataAgrupada['totales'] = dataAgrupada['totales'] || {};
+                dataAgrupada['totales'][moneda] = dataAgrupada['totales'][moneda] || {};
+                dataAgrupada['totales'][moneda]['importe_bruto_me'] = dataAgrupada['totales'][moneda]['importe_bruto_me'] || 0;
+                dataAgrupada['totales'][moneda]['importe_pagado_me'] = dataAgrupada['totales'][moneda]['importe_pagado_me'] || 0;
+                dataAgrupada['totales'][moneda]['importe_saldo_me'] = dataAgrupada['totales'][moneda]['importe_saldo_me'] || 0;
 
                 // totales por proveedor
-                dataAgrupada[proveedor]['totales']['importe_bruto_me'] += parseFloat(element.importe_bruto_me);
-                dataAgrupada[proveedor]['totales']['importe_pagado_me'] += parseFloat(element.importe_pagado_me);
-                dataAgrupada[proveedor]['totales']['importe_saldo_me'] += parseFloat(element.importe_saldo_me);
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_bruto_me'] += parseFloat(element.importe_bruto_me);
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_pagado_me'] += parseFloat(element.importe_pagado_me);
+                dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_saldo_me'] += parseFloat(element.importe_saldo_me);
 
                 // detalle por proveedor
-                dataAgrupada[proveedor]['detalle'].push(element);
+                dataAgrupada['proveedores'][proveedor]['detalle'].push(element);
+
+                // totales generales
+                dataAgrupada['totales'][moneda]['importe_bruto_me'] += parseFloat(element.importe_bruto_me);
+                dataAgrupada['totales'][moneda]['importe_pagado_me'] += parseFloat(element.importe_pagado_me);
+                dataAgrupada['totales'][moneda]['importe_saldo_me'] += parseFloat(element.importe_saldo_me);
 
                 // Otra forma
                 // dataAgrupada[proveedor_ruc] ??= [];
