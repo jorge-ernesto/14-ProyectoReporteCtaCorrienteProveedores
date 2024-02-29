@@ -1,0 +1,145 @@
+/**
+ * @NApiVersion 2.1
+ */
+define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
+
+    function (Basic, Search, Process, Helper, N) {
+
+        function agruparCtaCorrProv(dataCtaCorrProv) {
+
+            // Obtener data en formato agrupado
+            let dataAgrupada = {}; // * Audit: Util, manejo de JSON
+
+            dataCtaCorrProv.forEach(element => {
+
+                // Obtener variables
+                let proveedor_ruc = element.proveedor.ruc;
+                let proveedor_nombre = element.proveedor.nombre;
+                let proveedor = proveedor_ruc.trim() + ' - ' + proveedor_nombre.trim();
+
+                // Agrupar data
+                dataAgrupada[proveedor] = dataAgrupada[proveedor] || {};
+                dataAgrupada[proveedor]['totales'] = dataAgrupada[proveedor]['totales'] || {};
+                dataAgrupada[proveedor]['detalle'] = dataAgrupada[proveedor]['detalle'] || [];
+                dataAgrupada[proveedor]['totales']['importe_bruto_me'] = dataAgrupada[proveedor]['totales']['importe_bruto_me'] || 0;
+                dataAgrupada[proveedor]['totales']['importe_pagado_me'] = dataAgrupada[proveedor]['totales']['importe_pagado_me'] || 0;
+                dataAgrupada[proveedor]['totales']['importe_saldo_me'] = dataAgrupada[proveedor]['totales']['importe_saldo_me'] || 0;
+
+                // totales por proveedor
+                dataAgrupada[proveedor]['totales']['importe_bruto_me'] += parseFloat(element.importe_bruto_me);
+                dataAgrupada[proveedor]['totales']['importe_pagado_me'] += parseFloat(element.importe_pagado_me);
+                dataAgrupada[proveedor]['totales']['importe_saldo_me'] += parseFloat(element.importe_saldo_me);
+
+                // detalle por proveedor
+                dataAgrupada[proveedor]['detalle'].push(element);
+
+                // Otra forma
+                // dataAgrupada[proveedor_ruc] ??= [];
+                // dataAgrupada[proveedor_ruc] = element;
+            });
+
+            return dataAgrupada;
+        }
+
+        function getDataCtaCorrProv_Completo(dataCtaCorrProv, dataCtaCorrProv_Detracciones, balance) {
+
+            // Procesar reporte
+
+            // Formatear tipos de datos
+            dataCtaCorrProv.forEach((value, key) => {
+                dataCtaCorrProv[key]['importe_bruto_me'] = parseFloat(value['importe_bruto_me']);
+                dataCtaCorrProv[key]['importe_pagado_me'] = parseFloat(value['importe_pagado_me']);
+                dataCtaCorrProv[key]['ns_porcentaje_detraccion'] = !isNaN(parseFloat(value['ns_porcentaje_detraccion'])) ? parseFloat(value['ns_porcentaje_detraccion']) : value['ns_porcentaje_detraccion'];
+            });
+            dataCtaCorrProv_Detracciones.forEach((value, key) => {
+                dataCtaCorrProv_Detracciones[key]['importe_bruto_me'] = parseFloat(value['importe_bruto_me']);
+            });
+
+            // Agregar JSON de pagos
+            dataCtaCorrProv.forEach((valueCCP, keyCCP) => {
+                dataCtaCorrProv[keyCCP]['pagos'] = dataCtaCorrProv[keyCCP]['pagos'] || {};
+                dataCtaCorrProv[keyCCP]['pagos']['detracciones'] = dataCtaCorrProv[keyCCP]['pagos']['detracciones'] || [];
+            });
+
+            // Agregar pago de detracciones
+            dataCtaCorrProv.forEach((valueCCP, keyCCP) => {
+                dataCtaCorrProv_Detracciones.forEach((valueCCPD, keyCCPD) => {
+                    if (valueCCP.id_interno == valueCCPD.id_interno) {
+
+                        // Agregamos data de detraccion
+                        dataCtaCorrProv[keyCCP]['pagos']['detracciones'].push({
+                            numero_documento: valueCCPD.numero_documento,
+                            importe_detraccion_me: valueCCPD.importe_bruto_me
+                        })
+                    }
+                });
+            });
+
+            // Actualizar data
+            dataCtaCorrProv.forEach((value, key) => {
+
+                // Actualizar Facturas de compra con detracciones
+                let importe_detraccion = value['pagos']['detracciones'][0]?.['importe_detraccion_me'] || 0;
+
+                if (value.tipo.codigo == 'VendBill') { // Es Factura de compra
+
+                    if (value.ns_porcentaje_detraccion) { // Tiene aplicada detraccion
+
+                        dataCtaCorrProv[key]['importe_bruto_me'] = value['importe_bruto_me'] + importe_detraccion;
+
+                        if (value.ns_numero_detraccion) { // Tiene detraccion pagada
+
+                            dataCtaCorrProv[key]['importe_pagado_me'] = value['importe_pagado_me'] + importe_detraccion;
+                        }
+                    }
+                }
+            });
+
+            // Obtener saldo pendiente
+            dataCtaCorrProv.forEach((value, key) => {
+                if (value.tipo.codigo == 'VendBill' || value.tipo.codigo == 'Custom122') {
+                    dataCtaCorrProv[key]['importe_saldo_me'] = value['importe_bruto_me'] - value['importe_pagado_me'];
+                } else if (value.tipo.codigo == 'VendCred') {
+                    dataCtaCorrProv[key]['importe_saldo_me'] = value['importe_bruto_me'] + value['importe_pagado_me'];
+                }
+            });
+
+            // Filtrar por saldo pendiente
+            let dataCtaCorrProv_ = [];
+            if (balance) {
+                dataCtaCorrProv.forEach((value, key) => {
+                    if (value.tipo.codigo == 'VendBill' || value.tipo.codigo == 'Custom122') {
+                        if (balance == 'balancePendiente' && value.importe_saldo_me > 0) {
+                            dataCtaCorrProv_.push(value);
+                        } else if (balance == 'balanceCero' && value.importe_saldo_me <= 0) {
+                            dataCtaCorrProv_.push(value);
+                        }
+                    } else if (value.tipo.codigo == 'VendCred') {
+                        if (balance == 'balancePendiente' && value.importe_saldo_me < 0) {
+                            dataCtaCorrProv_.push(value);
+                        } else if (balance == 'balanceCero' && value.importe_saldo_me >= 0) {
+                            dataCtaCorrProv_.push(value);
+                        }
+                    }
+                });
+            } else {
+                dataCtaCorrProv_ = dataCtaCorrProv;
+            }
+
+            // Agrupar data
+            let dataCtaCorrProv_Agrupada = agruparCtaCorrProv(dataCtaCorrProv_);
+
+            return dataCtaCorrProv_Agrupada;
+        }
+
+        function getReporteFreeMarker(dataReporte) {
+
+            // Convertir valores nulos en un objeto JavaScript a string - Al parecer FreeMarker no acepta valores nulos
+            // dataReporte = Helper.convertObjectValuesToStrings(dataReporte);
+
+            return dataReporte;
+        }
+
+        return { getDataCtaCorrProv_Completo, getReporteFreeMarker }
+
+    });
