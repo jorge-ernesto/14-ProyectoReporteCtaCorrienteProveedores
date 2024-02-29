@@ -7,6 +7,11 @@ define(['N', './lib/data/Lib.Search'],
 
     function (N, SearchMe) {
 
+        const FIELDS = {
+            vendor: 'custpage_report_criteria_vendor',
+            ruc: 'custpage_report_criteria_ruc'
+        }
+
         /**
          * Function to be executed after page is initialized.
          *
@@ -18,6 +23,27 @@ define(['N', './lib/data/Lib.Search'],
          */
         function pageInit(scriptContext) {
 
+        }
+
+        /**
+         * Function to be executed when field is changed.
+         *
+         * @param {Object} scriptContext
+         * @param {Record} scriptContext.currentRecord - Current form record
+         * @param {string} scriptContext.sublistId - Sublist name
+         * @param {string} scriptContext.fieldId - Field name
+         * @param {number} scriptContext.lineNum - Line number. Will be undefined if not a sublist or matrix field
+         * @param {number} scriptContext.columnNum - Line number. Will be undefined if not a matrix field
+         *
+         * @since 2015.2
+         */
+        function fieldChanged(scriptContext) {
+
+            if (scriptContext.fieldId == FIELDS.vendor) {
+
+                // Limpiar RUC
+                scriptContext.currentRecord.setValue(FIELDS.ruc, '');
+            }
         }
 
         function exportToExcel() {
@@ -38,6 +64,7 @@ define(['N', './lib/data/Lib.Search'],
 
         return {
             pageInit: pageInit,
+            fieldChanged: fieldChanged,
             exportToExcel: exportToExcel
         };
 

@@ -217,10 +217,14 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 filters.push('AND');
                 filters.push(['name', 'anyof', vendor]);
             }
-            if (ruc) {
-                filters.push('AND');
-                filters.push(["vendorLine.vatregnumber", "startswith", ruc]);
-            }
+            // if (ruc) {
+            //     filters.push('AND');
+            //     filters.push(["vendor.vatregnumber", "startswith", ruc]); // Existe un problema al buscar "Letras por Pagar", estos registros tienen el RUC en "vendorLine.vatregnumber"
+            // }
+            // if (ruc) {
+            //     filters.push('AND');
+            //     filters.push(["vendorLine.vatregnumber", "startswith", ruc]); // Existe un problema al buscar solo las detracciones, es decir registros con la cuenta "42219111", estos registros tiene el RUC en "vendor.vatregnumber"
+            // }
             if (currency) {
                 filters.push('AND');
                 filters.push(['currency', 'anyof', currency]);
@@ -237,6 +241,31 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.updateFilters(filters);
         }
 
-        return { getDataCtaCorrProv, getDataCtaCorrProv_Detracciones }
+        function getVendorIdByRuc(ruc) {
+            var vendorSearch = search.create({
+                type: search.Type.VENDOR,
+                filters: [
+                    search.createFilter({
+                        name: 'vatregnumber',
+                        operator: search.Operator.IS,
+                        values: ruc
+                    })
+                ],
+                columns: ['internalid']
+            });
+
+            var searchResults = vendorSearch.run().getRange({
+                start: 0,
+                end: 1
+            });
+
+            if (searchResults && searchResults.length > 0) {
+                return searchResults[0].getValue('internalid');
+            }
+
+            return null;
+        }
+
+        return { getDataCtaCorrProv, getDataCtaCorrProv_Detracciones, getVendorIdByRuc }
 
     });

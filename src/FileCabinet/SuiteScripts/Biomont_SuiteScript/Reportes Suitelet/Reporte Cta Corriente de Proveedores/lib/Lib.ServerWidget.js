@@ -3,7 +3,7 @@
  */
 define(['N', './data/Lib.Dao', './data/Lib.Basic', './data/Lib.Helper', './data/Lib.Search'],
 
-    function (N, DAO, Basic, Helper, SearchMe) {
+    function (N, DAO, Basic, Helper, Search) {
 
         const { log, redirect, runtime } = N;
         const { serverWidget } = N.ui;
@@ -295,6 +295,10 @@ define(['N', './data/Lib.Dao', './data/Lib.Basic', './data/Lib.Helper', './data/
             // Enviar datos
             if (getParams['ruc']) {
                 getParams['ruc'] = getParams['ruc'].trim();
+            }
+
+            if (getParams['ruc']) {
+                getParams['vendor'] = Search.getVendorIdByRuc(getParams['ruc']);
             }
 
             // Enviar datos - multiselect 'Estado'
