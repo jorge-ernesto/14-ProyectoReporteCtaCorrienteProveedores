@@ -58,10 +58,11 @@
 }
 
 .bm-report-table th {
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     background-color: #E0E6EF;
-    padding: 5px
+    padding: 5px;
+    font-weight: bold;
 }
 
 
