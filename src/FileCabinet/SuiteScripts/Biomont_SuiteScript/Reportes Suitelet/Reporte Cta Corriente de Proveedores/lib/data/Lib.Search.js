@@ -242,24 +242,24 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
         }
 
         function getVendorIdByRuc(ruc) {
-            var vendorSearch = search.create({
+            var searchObj = search.create({
                 type: search.Type.VENDOR,
+                columns: ['internalid'],
                 filters: [
                     search.createFilter({
                         name: 'vatregnumber',
                         operator: search.Operator.IS,
                         values: ruc
                     })
-                ],
-                columns: ['internalid']
+                ]
             });
 
-            var searchResults = vendorSearch.run().getRange({
+            var searchResult = searchObj.run().getRange({
                 start: 0,
                 end: 1
             });
 
-            if (searchResults && searchResults.length > 0) {
+            if (searchResult && searchResult.length > 0) {
                 return searchResults[0].getValue('internalid');
             }
 
