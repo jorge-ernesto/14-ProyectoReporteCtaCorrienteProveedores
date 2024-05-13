@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CtaCorrienteProveedores</title>
+</head>
+
+<body>
+
+    <!-- CONFIGURACION FREEMARKER -->
+    <#setting number_format=",##0.00" />
+
+    <!-- ESTO ES LO QUE VE EL USUARIO -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.3/components/icon.min.css" />
+
+    <div class="bm-viewer">
+        <div class="bm-viewer-action">
+            <i class="big file green excel icon" onclick="exportToExcel()" style="margin-left: 10px;"></i>
+            <i class="big file primary csv icon" onclick="exportToCSV()" style="margin-left: 10px;"></i>
+        </div>
+        <div class="bm-container">
+            <div class="bm-container-body">
+                <table class="bm-report-table">
+
+                    <!-- Inicio de cabecera (tabla) -->
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <span>T/D</span>
+                            </th>
+                            <th class="center">
+                                <span>NS T/D</span>
+                            </th>
+                            <th class="right">
+                                <span>N. Documento</span>
+                            </th>
+                            <th class="right">
+                                <span>RUC</span>
+                            </th>
+                            <th class="right">
+                                <span>Proveedor</span>
+                            </th>
+                            <th class="right">
+                                <span>Fecha Reg.</span>
+                            </th>
+                            <th class="right">
+                                <span>Fecha Doc.</span>
+                            </th>
+                            <th class="right">
+                                <span>Fecha Vcto.</span>
+                            </th>
+                            <th class="right">
+                                <span>Estado</span>
+                            </th>
+                            <th class="right">
+                                <span>Moneda</span>
+                            </th>
+                            <th class="right">
+                                <span>Importe</span>
+                            </th>
+                            <th class="right">
+                                <span>Pagado</span>
+                            </th>
+                            <th class="right">
+                                <span>Saldo</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <!-- Fin de cabecera (tabla) -->
+
+                    <!-- Inicio de cuerpo (tabla) -->
+                    <tbody>
+                        <#list context.transactions.proveedores as keyprov, proveedores>
+                            <tr>
+                                <th colspan="13"><b>PROVEEDOR: ${keyprov}</b></th>
+                            </tr>
+                            <#list proveedores.detalle as documentos>
+                                <tr>
+                                    <td>${documentos.tipo.nombre}</td>
+                                    <td>${documentos.ns_tipo_documento.nombre}</td>
+                                    <td>${documentos.numero_documento}</td>
+                                    <td>${documentos.proveedor.ruc}</td>
+                                    <td>${documentos.proveedor.nombre}</td>
+                                    <td>${documentos.fecha_registro}</td>
+                                    <td>${documentos.fecha_emision}</td>
+                                    <td>${documentos.fecha_vencimiento}</td>
+                                    <td>${documentos.estado}</td>
+                                    <td>${documentos.moneda.nombre}</td>
+                                    <td>${documentos.importe_bruto_me}</td>
+                                    <td>${documentos.importe_pagado_me}</td>
+                                    <td>${documentos.importe_saldo_me}</td>
+                                </tr>
+                            </#list>
+                            <#list proveedores.totales as keymon, monedas>
+                                <tr>
+                                    <th class="right" colspan="10">TOTAL ${keymon}</th>
+                                    <th>${proveedores.totales[keymon].importe_bruto_me}</th>
+                                    <th>${proveedores.totales[keymon].importe_pagado_me}</th>
+                                    <th>${proveedores.totales[keymon].importe_saldo_me}</th>
+                                </tr>
+                            </#list>
+                            <tr>
+                                <td class="right" colspan="13">&nbsp;</td>
+                            </tr>
+                        </#list>
+
+                        <#list context.transactions.totales as keytot, totales>
+                            <tr>
+                                <th class="right" colspan="10">TOTAL ${keytot}</th>
+                                <th>${totales.importe_bruto_me}</th>
+                                <th>${totales.importe_pagado_me}</th>
+                                <th>${totales.importe_saldo_me}</th>
+                            </tr>
+                        </#list>
+                    </tbody>
+                    <!-- Fin de cuerpo (tabla) -->
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- CERRAR ESTO ES LO QUE VE EL USUARIO -->
+
+    <script>
+        var bmPathURI = new URL(window.location.href);
+
+        document.querySelectorAll('.bm-lbl').forEach(node => {
+
+            node.addEventListener('click', () => {
+
+                require(['N/url'], function (url) {
+
+                    let period = node.getAttribute('bm-period');
+                    let subsidiary = bmPathURI.searchParams.get('subsidiary');
+
+                    let bmPathDetailsURI = url.resolveScript({
+                        deploymentId: 'customdeploy_bio_sl_repdet_dessobven',
+                        scriptId: 'customscript_bio_sl_repdet_dessobven',
+                        params: {
+                            period: period,
+                            subsidiary: subsidiary,
+                        }
+                    });
+
+                    // window.location.href = bmPathDetailsURI;
+                    window.open(bmPathDetailsURI, '_blank');
+
+                })
+
+            })
+
+        });
+
+        function exportToExcel() {
+
+            const xlsHref = window.location.href + '&xls=T';
+
+            const a = document.createElement('a');
+            a.href = xlsHref;
+
+            // Añade el enlace al documento y haz clic en él para descargar
+            document.body.appendChild(a);
+            a.click();
+
+            // Limpia el objeto URL y elimina el enlace
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        function exportToCSV() {
+
+            const xlsHref = window.location.href + '&csv=T';
+
+            const a = document.createElement('a');
+            a.href = xlsHref;
+
+            // Añade el enlace al documento y haz clic en él para descargar
+            document.body.appendChild(a);
+            a.click();
+
+            // Limpia el objeto URL y elimina el enlace
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+
+</body>
+
+</html>

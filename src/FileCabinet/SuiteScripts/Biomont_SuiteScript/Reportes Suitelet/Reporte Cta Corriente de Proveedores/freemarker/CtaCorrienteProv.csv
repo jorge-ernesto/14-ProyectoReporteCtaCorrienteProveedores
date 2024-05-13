@@ -1,0 +1,6 @@
+T/D;NS T/D;N. Documento;RUC;Proveedor;Fecha Reg.;Fecha Doc.;Fecha Vcto.;Estado;Moneda;Importe;Pagado;Saldo
+<#list context.transactions.proveedores as keyprov, proveedores>
+    <#list proveedores.detalle as documentos>
+${documentos.tipo.nombre};${documentos.ns_tipo_documento.nombre};${documentos.numero_documento};${documentos.proveedor.ruc};${documentos.proveedor.nombre};${documentos.fecha_registro};${documentos.fecha_emision};${documentos.fecha_vencimiento};${documentos.estado};${documentos.moneda.nombre};${documentos.importe_bruto_me};${documentos.importe_pagado_me};${documentos.importe_saldo_me};
+    </#list>
+</#list>

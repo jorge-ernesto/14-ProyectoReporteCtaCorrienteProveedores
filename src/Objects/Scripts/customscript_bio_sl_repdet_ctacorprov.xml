@@ -1,0 +1,25 @@
+<suitelet scriptid="customscript_bio_sl_repdet_ctacorprov">
+  <description></description>
+  <isinactive>F</isinactive>
+  <name>Biomont SL Rep. Det. Cta. Corriente Prov</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <notifyuser>F</notifyuser>
+  <scriptfile>[/SuiteScripts/Biomont_SuiteScript/Reportes Suitelet/Reporte Cta Corriente de Proveedores/Bio.Suitelet.DetalleReporteCtaCorrienteProv.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_bio_sl_repdet_ctacorprov">
+      <allemployees>F</allemployees>
+      <allpartners>F</allpartners>
+      <allroles>T</allroles>
+      <audslctrole></audslctrole>
+      <eventtype></eventtype>
+      <isdeployed>T</isdeployed>
+      <isonline>F</isonline>
+      <loglevel>DEBUG</loglevel>
+      <runasrole>ADMINISTRATOR</runasrole>
+      <status>RELEASED</status>
+      <title>Biomont SL Rep. Det. Cta. Corriente Prov</title>
+    </scriptdeployment>
+  </scriptdeployments>
+</suitelet>
