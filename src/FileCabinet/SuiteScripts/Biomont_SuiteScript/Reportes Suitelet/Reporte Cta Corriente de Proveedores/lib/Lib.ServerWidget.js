@@ -295,10 +295,7 @@ define(['N', './data/Lib.Dao', './data/Lib.Basic', './data/Lib.Helper', './data/
             // Enviar datos
             if (getParams['ruc']) {
                 getParams['ruc'] = getParams['ruc'].trim();
-            }
-
-            if (getParams['ruc']) {
-                getParams['vendor'] = Search.getVendorIdByRuc(getParams['ruc']);
+                getParams['vendor'] = Helper.getVendorIdByRuc(getParams['ruc']);
             }
 
             // Enviar datos - multiselect 'Estado'

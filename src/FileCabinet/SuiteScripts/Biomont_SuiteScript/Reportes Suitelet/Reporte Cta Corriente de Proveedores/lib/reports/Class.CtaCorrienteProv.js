@@ -28,22 +28,42 @@ define(['./Class.ReportRenderer', '../data/Lib.Basic', '../data/Lib.Search', '..
                 // Helper.error_log('params', params);
 
                 // Obtener datos para enviar
-                let dataCtaCorrProv = Search.getDataCtaCorrProv(params);
-                let dataCtaCorrProv_Detracciones = Search.getDataCtaCorrProv_Detracciones(params);
-                let dataCtaCorrProv_Completo = Process.getDataCtaCorrProv_Completo(dataCtaCorrProv, dataCtaCorrProv_Detracciones, balance)
+                if (true) {
+                    // Listado de documentos (VendBill, Custom122, VendCred)
+                    let dataCtaCorPro = Search.getDataCtaCorPro(params);
 
-                // Procesar reporte
-                let dataReporte = Process.getReporteFreeMarker(dataCtaCorrProv_Completo);
+                    // Pagos de Registros Relacionados (VendBill, VendCred)
+                    let dataRegRel = [];
+                    let dataRegRel_Detalle = [];
+                    let dataRegRel_Completo = [];
 
-                // Debug
-                // Helper.error_log('dataReporte', dataReporte);
+                    // Pagos de Detracciones (VendBill)
+                    let dataDetracciones = Search.getDataDetracciones(dataCtaCorPro);
+                    let dataIdDiariosDetracciones = Search.getDataIdDiariosDetracciones(dataCtaCorPro);
+                    let dataDiariosDetracciones = Search.getDataDiarios(dataIdDiariosDetracciones);
 
-                // Enviar data a archivos HTML o Excel
-                let titleDocument = 'Reporte Cuenta Corriente de Proveedores';
-                this.addInput('name', titleDocument);
-                this.addInput('dateFrom', dateFrom);
-                this.addInput('dateTo', dateTo);
-                this.addInput('transactions', dataReporte);
+                    // Pagos de Letras por Pagar (Custom122)
+                    let dataIdPagosFacturas = [];
+                    let dataPagosFacturas = [];
+
+                    // Procesar reporte
+                    let dataCtaCorPro_Completo = Process.getDataCtaCorPro_Completo(dataCtaCorPro, dataRegRel_Completo, dataDetracciones, dataDiariosDetracciones, dataPagosFacturas, balance);
+                    let dataCtaCorPro_Agrupado = Process.agruparCtaCorPro(dataCtaCorPro_Completo);
+                    let dataReporte = Process.getReporteFreeMarker(dataCtaCorPro_Agrupado);
+
+                    // Debug
+                    // Helper.error_log('data', { dataCtaCorPro });
+                    // Helper.error_log('data', { dataPagosRegRel, dataPagosRegRel_Detalle });
+                    // Helper.error_log('data', { dataPagosDet });
+                    // Helper.error_log('data', { dataCtaCorPro_Completo, dataCtaCorPro_Agrupado, dataReporte });
+
+                    // Enviar data a archivos HTML o Excel
+                    let titleDocument = 'Reporte Cuenta Corriente de Proveedores';
+                    this.addInput('name', titleDocument);
+                    this.addInput('dateFrom', dateFrom);
+                    this.addInput('dateTo', dateTo);
+                    this.addInput('transactions', dataReporte);
+                }
             }
         }
 

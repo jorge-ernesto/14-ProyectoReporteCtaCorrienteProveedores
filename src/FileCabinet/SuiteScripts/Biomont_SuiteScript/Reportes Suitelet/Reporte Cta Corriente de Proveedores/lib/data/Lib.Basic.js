@@ -39,7 +39,8 @@ define(['N', './Lib.Helper'],
                 'CTA_CORRIENTE_PROV_XLS': 2,
                 'CTA_CORRIENTE_PROV_CSV': 3,
                 'DETALLE_CTA_CORRIENTE_PROV': 4,
-                'DETALLE_CTA_CORRIENTE_PROV_XLS': 5
+                'DETALLE_CTA_CORRIENTE_PROV_XLS': 5,
+                'DETALLE_CTA_CORRIENTE_PROV_CSV': 6
             }
         }
 

@@ -20,31 +20,48 @@ define(['./Class.ReportRenderer', '../data/Lib.Basic', '../data/Lib.Search', '..
                 }
 
                 // Obtener parametros
-                let { subsidiary, period } = params;
+                let { subsidiary, dateFrom, dateTo, vendor, ruc, currency, type, status, balance } = params;
 
                 // Debug
                 // Helper.error_log('params', params);
 
                 // Obtener datos para enviar
-                let dataDescuentoVtas_FacturasAgrupadas = Search.getDescuentoVtas_Facturas(subsidiary, [period]); // Esto es un array de detalle
-                let dataDescuentoVtas_NCDetalladas = Search.getDescuentoVtas_NC(subsidiary, [period]); // Esto es un array de detalle
-                let dataDescuentoVtas = Process.getDescuentoVtas(dataDescuentoVtas_FacturasAgrupadas, dataDescuentoVtas_NCDetalladas); // Esto es un array de detalle
-                dataDescuentoVtas = Process.getDescuentoVtasDetallado(dataDescuentoVtas); // Aca se convierte en un JSON agrupado
+                if (true) {
+                    // Listado de documentos (VendBill, Custom122, VendCred)
+                    let dataCtaCorPro = Search.getDataCtaCorPro(params);
 
-                // Procesar reporte
-                let dataReporte = Process.getReporteFreeMarker(dataDescuentoVtas);
+                    // Pagos de Registros Relacionados (VendBill, VendCred)
+                    let dataRegRel = Search.getDataRegRel(dataCtaCorPro);
+                    let dataRegRel_Detalle = Search.getDataRegRel_Detalle(dataRegRel);
+                    let dataRegRel_Completo = Process.getDataRegRel_Completo(dataRegRel, dataRegRel_Detalle);
 
-                // Debug
-                // Helper.error_log('dataDescuentoVtas_FacturasAgrupadas', dataDescuentoVtas_FacturasAgrupadas);
-                // Helper.error_log('dataDescuentoVtas_NCDetalladas', dataDescuentoVtas_NCDetalladas);
-                // Helper.error_log('dataDescuentoVtas', dataDescuentoVtas);
-                // Helper.error_log('dataReporte', dataReporte);
+                    // Pagos de Detracciones (VendBill)
+                    let dataDetracciones = Search.getDataDetracciones(dataCtaCorPro);
+                    let dataIdDiariosDetracciones = Search.getDataIdDiariosDetracciones(dataCtaCorPro);
+                    let dataDiariosDetracciones = Search.getDataDiarios(dataIdDiariosDetracciones);
 
-                // Enviar data a archivos HTML o Excel
-                let titleDocument = 'Detalle del Reporte Descuentos Sobre Ventas';
-                this.addInput('name', titleDocument);
-                this.addInput('period', dataReporte.dataDescuentoVtas.detalle[0].periodo_contable_nombre); // period
-                this.addInput('transactions', dataReporte)
+                    // Pagos de Letras por Pagar (Custom122)
+                    let dataIdPagosFacturas = Search.getDataIdPagosFacturas(dataCtaCorPro);
+                    let dataPagosFacturas = Search.getDataPagosFacturas(dataIdPagosFacturas);
+
+                    // Procesar reporte
+                    let dataCtaCorPro_Completo = Process.getDataCtaCorPro_Completo(dataCtaCorPro, dataRegRel_Completo, dataDetracciones, dataDiariosDetracciones, dataPagosFacturas, balance);
+                    let dataCtaCorPro_Agrupado = Process.agruparCtaCorPro(dataCtaCorPro_Completo);
+                    let dataReporte = Process.getReporteFreeMarker(dataCtaCorPro_Agrupado);
+
+                    // Debug
+                    // Helper.error_log('data', { dataCtaCorPro });
+                    // Helper.error_log('data', { dataPagosRegRel, dataPagosRegRel_Detalle });
+                    // Helper.error_log('data', { dataPagosDet });
+                    // Helper.error_log('data', { dataCtaCorPro_Completo, dataCtaCorPro_Agrupado, dataReporte });
+
+                    // Enviar data a archivos HTML o Excel
+                    let titleDocument = 'Reporte Cuenta Corriente de Proveedores';
+                    this.addInput('name', titleDocument);
+                    this.addInput('dateFrom', dateFrom);
+                    this.addInput('dateTo', dateTo);
+                    this.addInput('transactions', dataReporte);
+                }
             }
         }
 

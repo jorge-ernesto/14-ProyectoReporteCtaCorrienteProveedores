@@ -10,7 +10,7 @@
 <body>
 
     <!-- CONFIGURACION FREEMARKER -->
-    <#setting number_format=",##0" />
+    <#setting number_format=",##0.00" />
 
     <!-- ESTO ES LO QUE VE EL USUARIO -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.3/components/icon.min.css" />
@@ -26,38 +26,66 @@
                     <!-- Inicio de cabecera (tabla) -->
                     <thead>
                         <tr>
-                            <th>
-                                <span>MES</span>
+                            <th colspan="8" style="background-color: #607799; color: #FFF;">
+                                <span>&nbsp;</span>
                             </th>
-                            <th>
-                                <span>FECHA</span>
+
+                            <!-- Pagos -->
+                            <th class="center" colspan="5" style="background-color: #607799; color: #FFF;">
+                                <span>Pagos</span>
                             </th>
-                            <th>
-                                <span>PERIODO</span>
+                            <!-- Fin Pagos -->
+
+                            <th style="background-color: #607799; color: #FFF;">
+                                <span>&nbsp;</span>
                             </th>
-                            <th>
-                                <span>CLIENTE</span>
+                        </tr>
+                        <tr>
+                            <th class="center">
+                                <span>T/D</span>
                             </th>
-                            <th>
-                                <span>DOC</span>
+                            <th class="center" style="width: 200px;" >
+                                <span>NS T/D</span>
                             </th>
-                            <th>
-                                <span>N. DOC</span>
+                            <th class="center">
+                                <span>N. Documento</span>
                             </th>
-                            <th>
-                                <span>CODIGO</span>
+                            <th class="center">
+                                <span>Fecha Reg.</span>
                             </th>
-                            <th class="right">
-                                <span>VENTA</span>
+                            <th class="center">
+                                <span>Fecha Doc.</span>
                             </th>
-                            <th class="right">
-                                <span>DSCTO</span>
+                            <th class="center">
+                                <span>Fecha Vcto.</span>
                             </th>
-                            <th class="right">
-                                <span>V. NETA</span>
+                            <th class="center">
+                                <span>Moneda</span>
                             </th>
-                            <th class="right">
-                                <span>% Dscto</span>
+                            <th class="center">
+                                <span>Importe</span>
+                            </th>
+
+                            <!-- Pagos -->
+                            <th class="center">
+                                <span>Banco</span>
+                            </th>
+                            <th class="center">
+                                <span>Tipo de Transacción</span>
+                            </th>
+                            <th class="center">
+                                <span>Numero de Tipo de Transacción</span>
+                            </th>
+                            <th class="center">
+                                <span>Fecha de Transacción</span>
+                            </th>
+                            <th class="center">
+                                <span>Importe de Transacción</span>
+                            </th>
+                            <!-- Fin Pagos -->
+
+                            <th class="center">
+                                <span>Saldo</span>
                             </th>
                         </tr>
                     </thead>
@@ -65,58 +93,108 @@
 
                     <tbody>
                         <!-- Inicio de cuerpo (tabla) -->
-                        <#list context.transactions.dataDescuentoVtas.detalle as transaction>
-                            <#assign importe_bruto_soles = transaction.importe_bruto_soles>
-                            <#assign descuento = transaction.descuento>
-                            <#assign importe_neto_soles = transaction.importe_neto_soles>
-
-                            <#if (importe_bruto_soles == 0)>
-                                <#assign porcentaje = 0>
-                            <#else>
-                                <#assign porcentaje = (descuento * 100) / importe_bruto_soles>
-                            </#if>
-
-                            <!-- Problema con el nombre de cliente -->
-                            <#assign cliente = transaction.cliente?replace("&", "&amp;")?replace("<", "&lt;")?replace(">", "&gt;")>
-
+                        <#list context.transactions.proveedores as keyprov, proveedores>
                             <tr>
-                                <td>${transaction.mes_nombre}</td>
-                                <td>${transaction.fecha}</td>
-                                <td>${transaction.periodo_contable_nombre}</td>
-                                <td>${cliente}</td>
-                                <td>${transaction.ns_tipo_documento.nombre}</td>
-                                <td>${transaction.numero_documento}</td>
-                                <td>${transaction.articulo.codigo}</td>
-                                <td class="right">${(importe_bruto_soles)?string("#,##0.00")}</td>
-                                <td class="right">${(descuento)?string("#,##0.00")}</td>
-                                <td class="right">${(importe_neto_soles)?string("#,##0.00")}</td>
-                                <td class="right">${porcentaje}%</td>
+                                <th colspan="15"><span class="bm-lbl" bm-vendor="${proveedores.detalle[0].proveedor.id_interno}"><b>PROVEEDOR: ${keyprov}</b></span></th>
                             </tr>
+                            <#list proveedores.detalle as documentos>
+                                <tr>
+                                    <td>${documentos.tipo.nombre}</td>
+                                    <td>${documentos.ns_tipo_documento.nombre}</td>
+                                    <td>${documentos.numero_documento}</td>
+                                    <td>${documentos.fecha_registro}</td>
+                                    <td>${documentos.fecha_emision}</td>
+                                    <td>${documentos.fecha_vencimiento}</td>
+                                    <td>${documentos.moneda.nombre}</td>
+                                    <td>${documentos.importe_bruto_me}</td>
+
+                                    <!-- Pagos -->
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <!-- Fin Pagos -->
+
+                                    <td>${documentos.importe_saldo_me}</td>
+                                </tr>
+                                <#list documentos.pagos_registros_relacionados as regrel>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <!-- Pagos -->
+                                        <td>${regrel.banco.nombre}</td>
+                                        <td>${regrel.tipo.nombre}</td>
+                                        <td>${regrel.numero_documento}</td>
+                                        <td>${regrel.fecha}</td>
+                                        <td>${regrel.pago}</td>
+                                        <!-- Fin Pagos -->
+
+                                        <td></td>
+                                    </tr>
+                                </#list>
+                                <#if (documentos.pagos_detraccion.es_detraccion == 'T' && documentos.pagos_detraccion.es_autodetraccion == 'F')>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <!-- Pagos -->
+                                        <td>${documentos.pagos_detraccion.banco.nombre}</td>
+                                        <td>${documentos.pagos_detraccion.tipo.nombre} - Detracción</td>
+                                        <td>${documentos.pagos_detraccion.numero_documento}</td>
+                                        <td>${documentos.pagos_detraccion.fecha}</td>
+                                        <td>${documentos.pagos_detraccion.pago}</td>
+                                        <!-- Fin Pagos -->
+
+                                        <td></td>
+                                    </tr>
+                                </#if>
+                                <#list documentos.pagos_letrasxpagar as lxp>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <!-- Pagos -->
+                                        <td>${lxp.banco.nombre}</td>
+                                        <td>${lxp.tipo.nombre}</td>
+                                        <td>${lxp.numero_documento}</td>
+                                        <td>${lxp.fecha}</td>
+                                        <td>${lxp.pago}</td>
+                                        <!-- Fin Pagos -->
+
+                                        <td></td>
+                                    </tr>
+                                </#list>
+                                <tr>
+                                    <th colspan="8">&nbsp;</th>
+                                    <th class="right" colspan="4">TOTAL</th>
+                                    <th>${documentos.importe_pagado_me}</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </#list>
                         </#list>
                         <!-- Fin de cuerpo (tabla) -->
 
                         <!-- Inicio pie (tabla) -->
-                        <tr class="summary-total">
-                            <#assign totales = context.transactions.dataDescuentoVtas.totales>
-
-                            <#if (totales.importe_bruto_soles == 0)>
-                                <#assign porcentaje_total = 0>
-                            <#else>
-                                <#assign porcentaje_total = (totales.descuento * 100) / totales.importe_bruto_soles>
-                            </#if>
-
-                            <td>Totales</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="right">${totales.importe_bruto_soles}</td>
-                            <td class="right">${totales.descuento}</td>
-                            <td class="right">${totales.importe_neto_soles}</td>
-                            <td class="right">${porcentaje_total}%</td>
-                        </tr>
                         <!-- Fin de pie (tabla) -->
                     </tbody>
 
@@ -127,35 +205,6 @@
     <!-- CERRAR ESTO ES LO QUE VE EL USUARIO -->
 
     <script>
-        var bmPathURI = new URL(window.location.href);
-
-        document.querySelectorAll('.bm-lbl').forEach(node => {
-
-            node.addEventListener('click', () => {
-
-                require(['N/url'], function (url) {
-
-                    let period = node.getAttribute('bm-period');
-                    let subsidiary = bmPathURI.searchParams.get('subsidiary');
-
-                    let bmPathDetailsURI = url.resolveScript({
-                        deploymentId: 'customdeploy_bio_sl_repdet_dessobven',
-                        scriptId: 'customscript_bio_sl_repdet_dessobven',
-                        params: {
-                            period: period,
-                            subsidiary: subsidiary,
-                        }
-                    });
-
-                    // window.location.href = bmPathDetailsURI;
-                    window.open(bmPathDetailsURI, '_blank');
-
-                })
-
-            })
-
-        });
-
         function exportToExcel() {
 
             const xlsHref = window.location.href + '&xls=T';

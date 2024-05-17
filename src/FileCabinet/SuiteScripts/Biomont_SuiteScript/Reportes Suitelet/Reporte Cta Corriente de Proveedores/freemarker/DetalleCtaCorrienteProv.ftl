@@ -60,7 +60,8 @@
                 <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
             </Borders>
             <ss:Interior ss:Color="#E0E6EF" ss:Pattern="Solid" />
-            <NumberFormat ss:Format="Currency" />
+            <#--  <NumberFormat ss:Format="Currency" />  -->
+            <NumberFormat ss:Format="#,##0.00" />
         </ss:Style>
         <ss:Style ss:ID="t1-currency-0decimals">
             <ss:Font ss:Bold="1" />
@@ -72,6 +73,30 @@
             </Borders>
             <ss:Interior ss:Color="#E0E6EF" ss:Pattern="Solid" />
             <NumberFormat ss:Format="S/ #,##0" /> <!-- Alternativa a "Currency" para eliminar decimales -->
+        </ss:Style>
+        <ss:Style ss:ID="t1-totales">
+            <ss:Alignment ss:Horizontal="Right" />
+            <ss:Font ss:Bold="1" />
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+            </Borders>
+            <ss:Interior ss:Color="#E0E6EF" ss:Pattern="Solid" />
+            <NumberFormat ss:Format="0.00" />
+        </ss:Style>
+        <ss:Style ss:ID="t1-center">
+            <ss:Alignment ss:Horizontal="Center" />
+            <ss:Font ss:Bold="1" />
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
+            </Borders>
+            <ss:Interior ss:Color="#E0E6EF" ss:Pattern="Solid" />
+            <NumberFormat ss:Format="0.00" />
         </ss:Style>
         <ss:Style ss:ID="background">
             <Alignment ss:Horizontal="Right" ss:Vertical="Bottom" />
@@ -107,7 +132,8 @@
                 <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
                 <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#DCDCDC" />
             </Borders>
-            <NumberFormat ss:Format="Currency" />
+            <#--  <NumberFormat ss:Format="Currency" />  -->
+            <NumberFormat ss:Format="#,##0.00" />
         </ss:Style>
         <ss:Style ss:ID="cell-currency-0decimals">
             <Borders>
@@ -123,7 +149,10 @@
         <Table ss:StyleID="background">
 
             <!-- Tamaño de columnas -->
-            <Column ss:Width="200" />
+            <Column ss:Width="90" />
+            <Column ss:Width="90" />
+            <Column ss:Width="90" />
+            <Column ss:Width="90" />
             <Column ss:Width="90" />
             <Column ss:Width="90" />
             <Column ss:Width="90" />
@@ -153,152 +182,354 @@
             </Row>
             <Row>
                 <Cell ss:StyleID="header">
-                    <Data ss:Type="String">Periodo :</Data>
+                    <Data ss:Type="String">Fecha :</Data>
                 </Cell>
                 <Cell ss:StyleID="cell" ss:MergeAcross="2">
-                    <Data ss:Type="String">${context.period}</Data>
+                    <Data ss:Type="String">Del ${context.dateFrom} al ${context.dateTo}</Data>
                 </Cell>
             </Row>
+            <!--
+            <Row>
+                <Cell ss:StyleID="header">
+                    <Data ss:Type="String">Año :</Data>
+                </Cell>
+                <Cell ss:StyleID="cell" ss:MergeAcross="2">
+                    <Data ss:Type="String">${context.year}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="header">
+                    <Data ss:Type="String">Mes :</Data>
+                </Cell>
+                <Cell ss:StyleID="cell" ss:MergeAcross="2">
+                    <Data ss:Type="String">${context.month}</Data>
+                </Cell>
+            </Row>
+            -->
             <Row>
             </Row>
 
             <!-- Inicio de cabecera (tabla) -->
             <Row>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">MES</Data>
+                <Cell ss:StyleID="t1" ss:MergeAcross="7">
+                    <Data ss:Type="String"></Data>
+                </Cell>
+                <Cell ss:StyleID="t1-center" ss:MergeAcross="4">
+                    <Data ss:Type="String">PAGOS</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">FECHA</Data>
+                    <Data ss:Type="String"></Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">T/D</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">PERIODO</Data>
+                    <Data ss:Type="String">NS T/D</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">CLIENTE</Data>
+                    <Data ss:Type="String">N. DOCUMENTO</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">DOC</Data>
+                    <Data ss:Type="String">FECHA REG.</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">N. DOC</Data>
+                    <Data ss:Type="String">FECHA DOC.</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">CODIGO</Data>
+                    <Data ss:Type="String">FECHA VCTO.</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">VENTA</Data>
+                    <Data ss:Type="String">MONEDA</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">DSCTO</Data>
+                    <Data ss:Type="String">IMPORTE</Data>
+                </Cell>
+
+                <!-- Pagos -->
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">BANCO</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">V. NETA</Data>
+                    <Data ss:Type="String">TIPO DE TRANSACCIÓN</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">% Dscto</Data>
+                    <Data ss:Type="String">NUMERO DE TRANSACCIÓN</Data>
+                </Cell>
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">FECHA DE TRANSACCIÓN</Data>
+                </Cell>
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">IMPORTE DE TRANSACCIÓN</Data>
+                </Cell>
+                <!-- Fin Pagos -->
+
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">SALDO</Data>
                 </Cell>
             </Row>
 
             <!-- Inicio de cuerpo (tabla) -->
-            <#list context.transactions.dataDescuentoVtas.detalle as transaction>
-                <#assign importe_bruto_soles = transaction.importe_bruto_soles>
-                <#assign descuento = transaction.descuento>
-                <#assign importe_neto_soles = transaction.importe_neto_soles>
-
-                <#if (importe_bruto_soles == 0)>
-                    <#assign porcentaje = 0>
-                <#else>
-                    <#--  <#assign porcentaje = (descuento * 100) / importe_bruto_soles>  -->
-                    <#assign porcentaje = descuento / importe_bruto_soles>
-                </#if>
-
-                <!-- Problema con el nombre de cliente -->
-                <#assign cliente = transaction.cliente?replace("&", "&amp;")?replace("<", "&lt;")?replace(">", "&gt;")>
-
+            <#list context.transactions.proveedores as keyprov, proveedores>
+                <!--
                 <Row>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.mes_nombre}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.fecha}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.periodo_contable_nombre}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${cliente}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.ns_tipo_documento.nombre}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.numero_documento}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell">
-                        <Data ss:Type="String">${transaction.articulo.codigo}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell-currency">
-                        <Data ss:Type="Number">${importe_bruto_soles}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell-currency">
-                        <Data ss:Type="Number">${descuento}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell-currency">
-                        <Data ss:Type="Number">${importe_neto_soles}</Data>
-                    </Cell>
-                    <Cell ss:StyleID="cell-percent">
-                        <Data ss:Type="Number">${porcentaje}</Data>
+                    <Cell ss:StyleID="t1" ss:MergeAcross="13">
+                        <Data ss:Type="String">PROVEEDOR: ${keyprov}</Data>
                     </Cell>
                 </Row>
+                -->
+                <#list proveedores.detalle as documentos>
+                    <Row>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.tipo.nombre}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.ns_tipo_documento.nombre}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.numero_documento}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.fecha_registro}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.fecha_emision}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.fecha_vencimiento}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.moneda.nombre}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell-currency">
+                            <Data ss:Type="Number">${documentos.importe_bruto_me}</Data>
+                        </Cell>
+
+                        <!-- Pagos -->
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <!-- Fin Pagos -->
+
+                        <Cell ss:StyleID="cell-currency">
+                            <Data ss:Type="Number">${documentos.importe_saldo_me}</Data>
+                        </Cell>
+                    </Row>
+                    <#list documentos.pagos_registros_relacionados as regrel>
+                        <Row>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+
+                            <!-- Pagos -->
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${regrel.banco.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${regrel.tipo.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${regrel.numero_documento}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${regrel.fecha}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell-currency">
+                                <Data ss:Type="Number">${regrel.pago}</Data>
+                            </Cell>
+                            <!-- Fin Pagos -->
+
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                        </Row>
+                    </#list>
+                    <#if (documentos.pagos_detraccion.es_detraccion == 'T' && documentos.pagos_detraccion.es_autodetraccion == 'F')>
+                        <Row>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+
+                            <!-- Pagos -->
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${documentos.pagos_detraccion.banco.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${documentos.pagos_detraccion.tipo.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${documentos.pagos_detraccion.numero_documento}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${documentos.pagos_detraccion.fecha}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell-currency">
+                                <Data ss:Type="Number">${documentos.pagos_detraccion.pago}</Data>
+                            </Cell>
+                            <!-- Fin Pagos -->
+
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                        </Row>
+                    </#if>
+                    <#list documentos.pagos_letrasxpagar as lxp>
+                        <Row>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+
+                            <!-- Pagos -->
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${lxp.banco.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${lxp.tipo.nombre}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${lxp.numero_documento}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String">${lxp.fecha}</Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell-currency">
+                                <Data ss:Type="Number">${lxp.pago}</Data>
+                            </Cell>
+                            <!-- Fin Pagos -->
+
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                        </Row>
+                    </#list>
+                    <Row>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+
+                        <!-- Pagos -->
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String">TOTAL</Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-currency">
+                            <Data ss:Type="Number">${documentos.importe_pagado_me}</Data>
+                        </Cell>
+                        <!-- Fin Pagos -->
+
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                    </Row>
+                    <Row>
+                    </Row>
+                </#list>
             </#list>
-
-            <!-- Inicio pie (tabla) -->
-            <#assign totales = context.transactions.dataDescuentoVtas.totales>
-
-            <#if (totales.importe_bruto_soles == 0)>
-                <#assign porcentaje_total = 0>
-            <#else>
-                <#--  <#assign porcentaje_total = (totales.descuento * 100) / totales.importe_bruto_soles>  -->
-                <#assign porcentaje_total = totales.descuento / totales.importe_bruto_soles>
-            </#if>
-
-            <Row>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String">Totales</Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1">
-                    <Data ss:Type="String"></Data>
-                </Cell>
-                <Cell ss:StyleID="t1-currency-0decimals">
-                    <Data ss:Type="Number">${totales.importe_bruto_soles}</Data>
-                </Cell>
-                <Cell ss:StyleID="t1-currency-0decimals">
-                    <Data ss:Type="Number">${totales.descuento}</Data>
-                </Cell>
-                <Cell ss:StyleID="t1-currency-0decimals">
-                    <Data ss:Type="Number">${totales.importe_neto_soles}</Data>
-                </Cell>
-                <Cell ss:StyleID="t1-percent">
-                    <Data ss:Type="Number">${porcentaje_total}</Data>
-                </Cell>
-            </Row>
-            <Row>
-            </Row>
 
         </Table>
     </Worksheet>
