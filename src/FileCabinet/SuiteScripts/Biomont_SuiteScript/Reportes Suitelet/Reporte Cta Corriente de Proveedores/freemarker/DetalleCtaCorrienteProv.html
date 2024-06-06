@@ -26,7 +26,7 @@
                     <!-- Inicio de cabecera (tabla) -->
                     <thead>
                         <tr>
-                            <th colspan="8" style="background-color: #607799; color: #FFF;">
+                            <th colspan="10" style="background-color: #607799; color: #FFF;">
                                 <span>&nbsp;</span>
                             </th>
 
@@ -44,11 +44,17 @@
                             <th class="center">
                                 <span>T/D</span>
                             </th>
-                            <th class="center" style="width: 200px;" >
+                            <th class="center" style="width: 200px;">
                                 <span>NS T/D</span>
                             </th>
                             <th class="center">
                                 <span>N. Documento</span>
+                            </th>
+                            <th class="center">
+                                <span>RUC</span>
+                            </th>
+                            <th class="center" style="width: 300px;">
+                                <span>Proveedor</span>
                             </th>
                             <th class="center">
                                 <span>Fecha Reg.</span>
@@ -91,17 +97,19 @@
                     </thead>
                     <!-- Fin de cabecera (tabla) -->
 
+                    <!-- Inicio de cuerpo (tabla) -->
                     <tbody>
-                        <!-- Inicio de cuerpo (tabla) -->
                         <#list context.transactions.proveedores as keyprov, proveedores>
                             <tr>
-                                <th colspan="15"><span class="bm-lbl" bm-vendor="${proveedores.detalle[0].proveedor.id_interno}"><b>PROVEEDOR: ${keyprov}</b></span></th>
+                                <th colspan="16"><span class="bm-lbl" bm-vendor="${proveedores.detalle[0].proveedor.id_interno}"><b>PROVEEDOR: ${keyprov}</b></span></th>
                             </tr>
                             <#list proveedores.detalle as documentos>
                                 <tr>
                                     <td>${documentos.tipo.nombre}</td>
                                     <td>${documentos.ns_tipo_documento.nombre}</td>
                                     <td>${documentos.numero_documento}</td>
+                                    <td>${documentos.proveedor.ruc}</td>
+                                    <td>${documentos.proveedor.nombre}</td>
                                     <td>${documentos.fecha_registro}</td>
                                     <td>${documentos.fecha_emision}</td>
                                     <td>${documentos.fecha_vencimiento}</td>
@@ -120,6 +128,8 @@
                                 </tr>
                                 <#list documentos.pagos_registros_relacionados as regrel>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -150,6 +160,8 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
 
                                         <!-- Pagos -->
                                         <td>${documentos.pagos_detraccion.banco.nombre}</td>
@@ -172,6 +184,8 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
 
                                         <!-- Pagos -->
                                         <td>${lxp.banco.nombre}</td>
@@ -185,18 +199,28 @@
                                     </tr>
                                 </#list>
                                 <tr>
-                                    <th colspan="8">&nbsp;</th>
-                                    <th class="right" colspan="4">TOTAL</th>
+                                    <th colspan="10">&nbsp;</th>
+                                    <th class="right" colspan="4">TOTAL PAGOS</th>
                                     <th>${documentos.importe_pagado_me}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </#list>
                         </#list>
-                        <!-- Fin de cuerpo (tabla) -->
 
-                        <!-- Inicio pie (tabla) -->
-                        <!-- Fin de pie (tabla) -->
+                        <#list context.transactions.totales as keytot, totales>
+                            <tr>
+                                <th class="right" colspan="9">TOTAL ${keytot}</th>
+                                <th>${totales.importe_bruto_me}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>${totales.importe_pagado_me}</th>
+                                <th>${totales.importe_saldo_me}</th>
+                            </tr>
+                        </#list>
                     </tbody>
+                    <!-- Fin de cuerpo (tabla) -->
 
                 </table>
             </div>

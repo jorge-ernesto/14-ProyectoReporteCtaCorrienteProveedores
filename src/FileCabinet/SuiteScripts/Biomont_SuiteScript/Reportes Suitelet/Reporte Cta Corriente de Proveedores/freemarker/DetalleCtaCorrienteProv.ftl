@@ -211,7 +211,7 @@
 
             <!-- Inicio de cabecera (tabla) -->
             <Row>
-                <Cell ss:StyleID="t1" ss:MergeAcross="7">
+                <Cell ss:StyleID="t1" ss:MergeAcross="9">
                     <Data ss:Type="String"></Data>
                 </Cell>
                 <Cell ss:StyleID="t1-center" ss:MergeAcross="4">
@@ -230,6 +230,12 @@
                 </Cell>
                 <Cell ss:StyleID="t1">
                     <Data ss:Type="String">N. DOCUMENTO</Data>
+                </Cell>
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">RUC</Data>
+                </Cell>
+                <Cell ss:StyleID="t1">
+                    <Data ss:Type="String">PROVEEDOR</Data>
                 </Cell>
                 <Cell ss:StyleID="t1">
                     <Data ss:Type="String">FECHA REG.</Data>
@@ -291,6 +297,12 @@
                             <Data ss:Type="String">${documentos.numero_documento}</Data>
                         </Cell>
                         <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.proveedor.ruc}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
+                            <Data ss:Type="String">${documentos.proveedor.nombre}</Data>
+                        </Cell>
+                        <Cell ss:StyleID="cell">
                             <Data ss:Type="String">${documentos.fecha_registro}</Data>
                         </Cell>
                         <Cell ss:StyleID="cell">
@@ -330,6 +342,12 @@
                     </Row>
                     <#list documentos.pagos_registros_relacionados as regrel>
                         <Row>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String"></Data>
                             </Cell>
@@ -404,6 +422,12 @@
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String"></Data>
                             </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
 
                             <!-- Pagos -->
                             <Cell ss:StyleID="cell">
@@ -430,6 +454,12 @@
                     </#if>
                     <#list documentos.pagos_letrasxpagar as lxp>
                         <Row>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
+                            <Cell ss:StyleID="cell">
+                                <Data ss:Type="String"></Data>
+                            </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String"></Data>
                             </Cell>
@@ -503,6 +533,12 @@
                         <Cell ss:StyleID="t1-totales">
                             <Data ss:Type="String"></Data>
                         </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
+                        <Cell ss:StyleID="t1-totales">
+                            <Data ss:Type="String"></Data>
+                        </Cell>
 
                         <!-- Pagos -->
                         <Cell ss:StyleID="t1-totales">
@@ -515,7 +551,7 @@
                             <Data ss:Type="String"></Data>
                         </Cell>
                         <Cell ss:StyleID="t1-totales">
-                            <Data ss:Type="String">TOTAL</Data>
+                            <Data ss:Type="String">TOTAL PAGOS</Data>
                         </Cell>
                         <Cell ss:StyleID="t1-currency">
                             <Data ss:Type="Number">${documentos.importe_pagado_me}</Data>
@@ -529,6 +565,35 @@
                     <Row>
                     </Row>
                 </#list>
+            </#list>
+
+            <#list context.transactions.totales as keytot, totales>
+                <Row>
+                    <Cell ss:StyleID="t1-totales" ss:MergeAcross="8">
+                        <Data ss:Type="String">TOTAL ${keytot}</Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-currency">
+                        <Data ss:Type="Number">${totales.importe_bruto_me}</Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-totales">
+                        <Data ss:Type="String"></Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-totales">
+                        <Data ss:Type="String"></Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-totales">
+                        <Data ss:Type="String"></Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-totales">
+                        <Data ss:Type="String"></Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-currency">
+                        <Data ss:Type="Number">${totales.importe_pagado_me}</Data>
+                    </Cell>
+                    <Cell ss:StyleID="t1-currency">
+                        <Data ss:Type="Number">${totales.importe_saldo_me}</Data>
+                    </Cell>
+                </Row>
             </#list>
 
         </Table>

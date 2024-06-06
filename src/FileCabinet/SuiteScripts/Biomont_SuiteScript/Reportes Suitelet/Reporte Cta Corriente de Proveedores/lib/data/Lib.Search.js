@@ -402,7 +402,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 if (tipo_codigo == 'VendBill') {
 
                     // Registros Relacionados - Transacción a pagar
-                    if (tran_pagar_id_interno) {
+                    if (tran_pagar_id_interno && tran_pagar_tipo_codigo != 'FxReval') {
                         resultTransaction.push({
                             id_interno: id_interno,
                             tipo: { codigo: tipo_codigo, id: tipo, nombre: tipo_nombre },
@@ -424,7 +424,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 if (tipo_codigo == 'VendCred') {
 
                     // Registros Relacionados - Transacción paga
-                    if (tran_paga_id_interno) {
+                    if (tran_paga_id_interno && tran_paga_tipo_codigo != 'FxReval') {
                         resultTransaction.push({
                             id_interno: id_interno,
                             tipo: { codigo: tipo_codigo, id: tipo, nombre: tipo_nombre },
