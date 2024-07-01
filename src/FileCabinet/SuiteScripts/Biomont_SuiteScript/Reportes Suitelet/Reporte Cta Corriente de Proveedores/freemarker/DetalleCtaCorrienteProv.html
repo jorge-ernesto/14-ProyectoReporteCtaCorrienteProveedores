@@ -142,7 +142,7 @@
                                         <!-- Pagos -->
                                         <td>${regrel.banco.nombre}</td>
                                         <td>${regrel.tipo.nombre}</td>
-                                        <td>${regrel.numero_documento}</td>
+                                        <td>${regrel.numero_documento} <#if regrel.tipo.codigo = 'VendPymt'>- ${regrel.numero_transaccion}</#if></td>
                                         <td>${regrel.fecha}</td>
                                         <td>${regrel.pago}</td>
                                         <!-- Fin Pagos -->
@@ -190,7 +190,7 @@
                                         <!-- Pagos -->
                                         <td>${lxp.banco.nombre}</td>
                                         <td>${lxp.tipo.nombre}</td>
-                                        <td>${lxp.numero_documento}</td>
+                                        <td>${lxp.numero_documento} - ${lxp.numero_transaccion}</td>
                                         <td>${lxp.fecha}</td>
                                         <td>${lxp.pago}</td>
                                         <!-- Fin Pagos -->

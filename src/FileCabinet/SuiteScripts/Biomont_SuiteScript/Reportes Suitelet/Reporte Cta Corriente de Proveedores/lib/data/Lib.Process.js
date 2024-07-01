@@ -151,6 +151,7 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                                     tipo: value_RR.regrel_tipo,
                                     ns_tipo_documento: value_RR.regrel_ns_tipo_documento,
                                     numero_documento: value_RR.regrel_numero_documento,
+                                    numero_transaccion: value_RR.regrel_numero_transaccion,
                                     fecha: value_RR.regrel_fecha,
                                     pago: value_RR.regrel_pago
                                 });
@@ -248,6 +249,7 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                                     tipo: value_PF.tipo,
                                     ns_tipo_documento: '',
                                     numero_documento: value_PF.numero_documento,
+                                    numero_transaccion: value_PF.numero_transaccion,
                                     fecha: value_PF.fecha,
                                     pago: value_PF.importe_debito_me
                                 });
