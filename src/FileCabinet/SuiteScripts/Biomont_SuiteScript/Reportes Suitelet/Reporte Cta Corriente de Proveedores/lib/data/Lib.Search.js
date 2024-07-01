@@ -305,6 +305,11 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 label: "Transacción a pagar : Número de documento"
             });
             transactionQuery.pushColumn({
+                name: "transactionnumber",
+                join: "payingTransaction",
+                label: "Transacción a pagar : Número de transacción"
+            });
+            transactionQuery.pushColumn({
                 name: "trandate",
                 join: "payingTransaction",
                 label: "Transacción a pagar : Fecha"
@@ -335,6 +340,11 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 name: "tranid",
                 join: "paidTransaction",
                 label: "Transacción paga : Número de documento"
+            });
+            transactionQuery.pushColumn({
+                name: "transactionnumber",
+                join: "paidTransaction",
+                label: "Transacción paga : Número de transacción"
             });
             transactionQuery.pushColumn({
                 name: "trandate",
@@ -380,19 +390,21 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 let tran_pagar_ns_tipo_documento = node.getValue(9);
                 let tran_pagar_ns_tipo_documento_nombre = node.getText(9);
                 let tran_pagar_numero_documento = node.getValue(10);
-                let tran_pagar_fecha = node.getValue(11);
+                let tran_pagar_numero_transaccion = node.getValue(11);
+                let tran_pagar_fecha = node.getValue(12);
                 // Registros Relacionados - Transacción paga
-                let tran_paga_id_interno = node.getValue(12);
-                let tran_paga_tipo_codigo = node.getValue(13);
-                let tran_paga_tipo = node.getValue(14);
-                let tran_paga_tipo_nombre = node.getText(14);
-                let tran_paga_ns_tipo_documento = node.getValue(15);
-                let tran_paga_ns_tipo_documento_nombre = node.getText(15);
-                let tran_paga_numero_documento = node.getValue(16);
-                let tran_paga_fecha = node.getValue(17);
+                let tran_paga_id_interno = node.getValue(13);
+                let tran_paga_tipo_codigo = node.getValue(14);
+                let tran_paga_tipo = node.getValue(15);
+                let tran_paga_tipo_nombre = node.getText(15);
+                let tran_paga_ns_tipo_documento = node.getValue(16);
+                let tran_paga_ns_tipo_documento_nombre = node.getText(16);
+                let tran_paga_numero_documento = node.getValue(17);
+                let tran_paga_numero_transaccion = node.getValue(18);
+                let tran_paga_fecha = node.getValue(19);
                 // Importes
-                let importe_bruto_me = node.getValue(18); // Importe bruto (moneda extranjera)
-                let importe_pagado_me = node.getValue(19); // Importe pagado (moneda extranjera)
+                let importe_bruto_me = node.getValue(20); // Importe bruto (moneda extranjera)
+                let importe_pagado_me = node.getValue(21); // Importe pagado (moneda extranjera)
 
                 // Procesar informacion
                 importe_bruto_me = parseFloat(importe_bruto_me);
@@ -412,6 +424,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                             regrel_tipo: { codigo: tran_pagar_tipo_codigo, id: tran_pagar_tipo, nombre: tran_pagar_tipo_nombre },
                             regrel_ns_tipo_documento: { id: tran_pagar_ns_tipo_documento, nombre: tran_pagar_ns_tipo_documento_nombre },
                             regrel_numero_documento: tran_pagar_numero_documento,
+                            regrel_numero_transaccion: (tran_pagar_tipo_codigo == 'VendPymt') ? tran_pagar_numero_transaccion : '',
                             regrel_fecha: tran_pagar_fecha,
                             regrel_pago: 0,
                             importe_bruto_me: importe_bruto_me,
@@ -434,6 +447,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                             regrel_tipo: { codigo: tran_paga_tipo_codigo, id: tran_paga_tipo, nombre: tran_paga_tipo_nombre },
                             regrel_ns_tipo_documento: { id: tran_paga_ns_tipo_documento, nombre: tran_paga_ns_tipo_documento_nombre },
                             regrel_numero_documento: tran_paga_numero_documento,
+                            regrel_numero_transaccion: (tran_paga_tipo_codigo == 'VendPymt') ? tran_paga_numero_transaccion : '',
                             regrel_fecha: tran_paga_fecha,
                             regrel_pago: 0,
                             importe_bruto_me: importe_bruto_me,
@@ -872,6 +886,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.pushColumn({ name: "typecode", label: "Type Code" });
             transactionQuery.pushColumn({ name: "type", label: "Type" });
             transactionQuery.pushColumn({ name: "tranid", label: "Document Number" });
+            transactionQuery.pushColumn({ name: "transactionnumber", label: "Transaction Number" });
             transactionQuery.pushColumn({ name: "appliedtotransaction", label: "Aplicado a la transacción" });
             // transactionQuery.pushColumn({ // Esto trae cabecera y detalle de la factura a la cual se aplico la detracción
             //     name: "internalid",
@@ -909,12 +924,13 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 let tipo = node.getValue(3);
                 let tipo_nombre = node.getText(3);
                 let numero_documento = node.getValue(4);
-                let aplicado_transaccion_id_interno = node.getValue(5);
-                let importe_debito_me = node.getValue(6); // Importe debito (moneda extranjera)
-                let importe_credito_me = node.getValue(7); // Importe crédito (moneda extranjera)
-                let banco = node.getValue(8);
-                let banco_nombre = node.getText(8);
-                let fecha = node.getValue(9);
+                let numero_transaccion = node.getValue(5);
+                let aplicado_transaccion_id_interno = node.getValue(6);
+                let importe_debito_me = node.getValue(7); // Importe debito (moneda extranjera)
+                let importe_credito_me = node.getValue(8); // Importe crédito (moneda extranjera)
+                let banco = node.getValue(9);
+                let banco_nombre = node.getText(9);
+                let fecha = node.getValue(10);
 
                 // Procesar informacion
                 importe_debito_me = parseFloat(importe_debito_me);
@@ -925,6 +941,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                     id_interno: id_interno,
                     tipo: { codigo: tipo_codigo, id: tipo, nombre: tipo_nombre },
                     numero_documento: numero_documento,
+                    numero_transaccion: numero_transaccion,
                     aplicado_transaccion_id_interno: aplicado_transaccion_id_interno,
                     importe_debito_me: importe_debito_me,
                     importe_credito_me: importe_credito_me,

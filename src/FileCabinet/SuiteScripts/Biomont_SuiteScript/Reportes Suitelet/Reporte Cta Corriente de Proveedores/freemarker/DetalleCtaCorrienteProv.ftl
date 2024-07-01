@@ -381,7 +381,7 @@
                                 <Data ss:Type="String">${regrel.tipo.nombre}</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
-                                <Data ss:Type="String">${regrel.numero_documento}</Data>
+                                <Data ss:Type="String">${regrel.numero_documento} <#if regrel.tipo.codigo = 'VendPymt'>- ${regrel.numero_transaccion}</#if></Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String">${regrel.fecha}</Data>
@@ -434,7 +434,7 @@
                                 <Data ss:Type="String">${documentos.pagos_detraccion.banco.nombre}</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
-                                <Data ss:Type="String">${documentos.pagos_detraccion.tipo.nombre}</Data>
+                                <Data ss:Type="String">${documentos.pagos_detraccion.tipo.nombre} - Detracción</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String">${documentos.pagos_detraccion.numero_documento}</Data>
@@ -493,7 +493,7 @@
                                 <Data ss:Type="String">${lxp.tipo.nombre}</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
-                                <Data ss:Type="String">${lxp.numero_documento}</Data>
+                                <Data ss:Type="String">${lxp.numero_documento} - ${lxp.numero_transaccion}</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String">${lxp.fecha}</Data>
