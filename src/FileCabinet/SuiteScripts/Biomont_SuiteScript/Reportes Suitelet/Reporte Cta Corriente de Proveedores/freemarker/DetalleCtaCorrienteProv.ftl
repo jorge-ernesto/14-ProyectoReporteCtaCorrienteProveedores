@@ -381,7 +381,11 @@
                                 <Data ss:Type="String">${regrel.tipo.nombre}</Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
-                                <Data ss:Type="String">${regrel.numero_documento} <#if regrel.tipo.codigo = 'VendPymt'>- ${regrel.numero_transaccion}</#if></Data>
+                                <Data ss:Type="String">
+                                    ${regrel.numero_documento}
+                                    <#if regrel.tipo.codigo = 'VendPymt'>- ${regrel.numero_transaccion}</#if>
+                                    <#if regrel.tipo.codigo = 'VPrepApp'>- ${regrel.aplicado_transaccion__tipo_documento_numero_documento}</#if>
+                                </Data>
                             </Cell>
                             <Cell ss:StyleID="cell">
                                 <Data ss:Type="String">${regrel.fecha}</Data>

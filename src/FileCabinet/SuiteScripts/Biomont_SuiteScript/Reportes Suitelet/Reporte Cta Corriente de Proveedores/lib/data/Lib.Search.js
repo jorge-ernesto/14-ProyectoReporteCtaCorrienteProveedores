@@ -425,6 +425,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                             regrel_ns_tipo_documento: { id: tran_pagar_ns_tipo_documento, nombre: tran_pagar_ns_tipo_documento_nombre },
                             regrel_numero_documento: tran_pagar_numero_documento,
                             regrel_numero_transaccion: (tran_pagar_tipo_codigo == 'VendPymt') ? tran_pagar_numero_transaccion : '',
+                            regrel_aplicado_transaccion__tipo_documento_numero_documento: '',
                             regrel_fecha: tran_pagar_fecha,
                             regrel_pago: 0,
                             importe_bruto_me: importe_bruto_me,
@@ -448,6 +449,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                             regrel_ns_tipo_documento: { id: tran_paga_ns_tipo_documento, nombre: tran_paga_ns_tipo_documento_nombre },
                             regrel_numero_documento: tran_paga_numero_documento,
                             regrel_numero_transaccion: (tran_paga_tipo_codigo == 'VendPymt') ? tran_paga_numero_transaccion : '',
+                            regrel_aplicado_transaccion__tipo_documento_numero_documento: '',
                             regrel_fecha: tran_paga_fecha,
                             regrel_pago: 0,
                             importe_bruto_me: importe_bruto_me,
@@ -490,6 +492,8 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
             transactionQuery.pushColumn({ name: "typecode", label: "Type Code" });
             transactionQuery.pushColumn({ name: "type", label: "Type" });
             transactionQuery.pushColumn({ name: "tranid", label: "Document Number" });
+            // Aplicado a la transacción
+            transactionQuery.pushColumn({ name: "appliedtotransaction", label: "Aplicado a la transacción" });
             transactionQuery.pushColumn({
                 name: "internalid",
                 join: "appliedToTransaction",
@@ -500,6 +504,7 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 join: "appliedToTransaction",
                 label: "Aplicado a la transacción : Importe pagado (moneda extranjera)"
             });
+            // Cerrar
             transactionQuery.pushColumn({ name: "appliedtoforeignamount", label: "Aplicado al vínculo importe (moneda extranjera)" });
             transactionQuery.pushColumn({ name: "fxamountpaid", label: "Importe pagado (moneda extranjera)" });
             transactionQuery.pushColumn({
@@ -530,12 +535,15 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                 let regrel_tipo = node.getValue(3);
                 let regrel_tipo_nombre = node.getText(3);
                 let regrel_numero_documento = node.getValue(4);
-                let aplicado_transaccion_id_interno = node.getValue(5);
-                let aplicado_transaccion_importe_pagado_me = node.getValue(6);
-                let aplicado_vinculo_importe_me = node.getValue(7);
-                let importe_pagado_me = node.getValue(8);
-                let banco = node.getValue(9);
-                let banco_nombre = node.getText(9);
+                // Aplicado a la transacción
+                let aplicado_transaccion__tipo_documento_numero_documento = node.getText(5);
+                let aplicado_transaccion_id_interno = node.getValue(6);
+                let aplicado_transaccion_importe_pagado_me = node.getValue(7);
+                // Cerrar
+                let aplicado_vinculo_importe_me = node.getValue(8);
+                let importe_pagado_me = node.getValue(9);
+                let banco = node.getValue(10);
+                let banco_nombre = node.getText(10);
 
                 // Procesar informacion
                 aplicado_transaccion_importe_pagado_me = parseFloat(aplicado_transaccion_importe_pagado_me);
@@ -547,8 +555,11 @@ define(['./Lib.Basic', './Lib.Helper', 'N'],
                     regrel_id_interno: regrel_id_interno,
                     regrel_tipo: { codigo: regrel_tipo_codigo, id: regrel_tipo, nombre: regrel_tipo_nombre },
                     regrel_numero_documento: regrel_numero_documento,
+                    // Aplicado a la transacción
+                    aplicado_transaccion__tipo_documento_numero_documento: aplicado_transaccion__tipo_documento_numero_documento,
                     aplicado_transaccion_id_interno: aplicado_transaccion_id_interno,
                     aplicado_transaccion_importe_pagado_me: aplicado_transaccion_importe_pagado_me,
+                    // Cerrar
                     aplicado_vinculo_importe_me: aplicado_vinculo_importe_me,
                     importe_pagado_me: importe_pagado_me,
                     banco: { id: banco, nombre: banco_nombre },

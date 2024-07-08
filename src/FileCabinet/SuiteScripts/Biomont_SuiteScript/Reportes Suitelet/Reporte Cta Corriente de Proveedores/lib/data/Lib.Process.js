@@ -78,12 +78,30 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                                         }
                                     }
                                 }
-                            } else if (regrel_tipo_codigo == 'VendPymt' || regrel_tipo_codigo == 'VPrepApp') { // Pago: Pago de factura, Solicitud de pagos anticipados de proveedores
+                            } else if (regrel_tipo_codigo == 'VendPymt') { // Pago: Pago de factura
 
                                 // Cabecera
                                 if (value_RR_DET.regrel_mainline == '*') {
                                     if (value_RR_DET.banco.id) {
                                         dataPagosRegRel[key_RR]['regrel_banco'] = value_RR_DET.banco;
+                                    }
+                                }
+
+                                // Detalle
+                                if (value_RR.id_interno == value_RR_DET.aplicado_transaccion_id_interno) {
+                                    if (value_RR_DET.aplicado_vinculo_importe_me) {
+                                        dataPagosRegRel[key_RR]['regrel_pago'] += parseFloat(value_RR_DET.aplicado_vinculo_importe_me);
+                                    }
+                                }
+                            } else if (regrel_tipo_codigo == 'VPrepApp') { // Pago: Solicitud de pagos anticipados de proveedores
+
+                                // Cabecera
+                                if (value_RR_DET.regrel_mainline == '*') {
+                                    if (value_RR_DET.banco.id) {
+                                        dataPagosRegRel[key_RR]['regrel_banco'] = value_RR_DET.banco;
+                                    }
+                                    if (value_RR_DET.aplicado_transaccion__tipo_documento_numero_documento) {
+                                        dataPagosRegRel[key_RR]['regrel_aplicado_transaccion__tipo_documento_numero_documento'] = value_RR_DET.aplicado_transaccion__tipo_documento_numero_documento;
                                     }
                                 }
 
@@ -152,6 +170,7 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                                     ns_tipo_documento: value_RR.regrel_ns_tipo_documento,
                                     numero_documento: value_RR.regrel_numero_documento,
                                     numero_transaccion: value_RR.regrel_numero_transaccion,
+                                    aplicado_transaccion__tipo_documento_numero_documento: value_RR.regrel_aplicado_transaccion__tipo_documento_numero_documento,
                                     fecha: value_RR.regrel_fecha,
                                     pago: value_RR.regrel_pago
                                 });
