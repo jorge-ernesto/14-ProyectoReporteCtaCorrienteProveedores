@@ -136,8 +136,7 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
 
         function getDataCtaCorPro_Completo(dataCtaCorPro, dataRegRel_Completo, dataDetracciones, dataDiariosDetracciones, dataPagosFacturas, balance) {
 
-            // Procesar reporte
-            // Formatear tipos de datos
+            // Procesar informacion
             // ...
 
             // Agregar arreglos vacios / Agregar JSON vacios
