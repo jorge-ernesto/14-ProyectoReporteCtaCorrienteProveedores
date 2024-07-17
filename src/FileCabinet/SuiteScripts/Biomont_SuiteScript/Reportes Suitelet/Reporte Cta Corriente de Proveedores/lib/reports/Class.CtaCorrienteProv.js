@@ -53,8 +53,7 @@ define(['./Class.ReportRenderer', '../data/Lib.Basic', '../data/Lib.Search', '..
 
                     // Debug
                     // Helper.error_log('data', { dataCtaCorPro });
-                    // Helper.error_log('data', { dataPagosRegRel, dataPagosRegRel_Detalle });
-                    // Helper.error_log('data', { dataPagosDet });
+                    // Helper.error_log('data', { dataRegRel, dataRegRel_Detalle });
                     // Helper.error_log('data', { dataCtaCorPro_Completo, dataCtaCorPro_Agrupado, dataReporte });
 
                     // Enviar data a archivos HTML o Excel

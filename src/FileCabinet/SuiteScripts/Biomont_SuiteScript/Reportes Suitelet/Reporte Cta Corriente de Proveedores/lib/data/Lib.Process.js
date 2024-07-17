@@ -136,9 +136,6 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
 
         function getDataCtaCorPro_Completo(dataCtaCorPro, dataRegRel_Completo, dataDetracciones, dataDiariosDetracciones, dataPagosFacturas, balance) {
 
-            // Procesar informacion
-            // ...
-
             // Agregar arreglos vacios / Agregar JSON vacios
             dataCtaCorPro.forEach((value, key) => {
                 dataCtaCorPro[key]['pagos_registros_relacionados'] = dataCtaCorPro[key]['pagos_registros_relacionados'] || [];
@@ -383,7 +380,7 @@ define(['./Lib.Basic', './Lib.Search', './Lib.Process', './Lib.Helper', 'N'],
                 dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_bruto_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_bruto_me'] || 0;
                 dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_pagado_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_pagado_me'] || 0;
                 dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_saldo_me'] = dataAgrupada['proveedores'][proveedor]['totales'][moneda]['importe_saldo_me'] || 0;
-                // Agrupara data
+                // Agrupar data
                 dataAgrupada['totales'] = dataAgrupada['totales'] || {};
                 dataAgrupada['totales'][moneda] = dataAgrupada['totales'][moneda] || {};
                 dataAgrupada['totales'][moneda]['importe_bruto_me'] = dataAgrupada['totales'][moneda]['importe_bruto_me'] || 0;
