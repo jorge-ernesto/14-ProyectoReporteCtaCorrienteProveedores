@@ -5,7 +5,7 @@ define(['N'],
 
     function (N) {
 
-        const { runtime, email, file } = N;
+        const { runtime, email, file, search } = N;
 
         function error_log(title, data) {
             throw `${title} -- ${JSON.stringify(data)}`;
@@ -61,6 +61,33 @@ define(['N'],
 
         /******************/
 
+        function getVendorIdByRuc(ruc) {
+            var searchObj = search.create({
+                type: search.Type.VENDOR,
+                columns: ['internalid'],
+                filters: [
+                    search.createFilter({
+                        name: 'vatregnumber',
+                        operator: search.Operator.IS,
+                        values: ruc
+                    })
+                ]
+            });
+
+            var searchResult = searchObj.run().getRange({
+                start: 0,
+                end: 1
+            });
+
+            if (searchResult && searchResult.length > 0) {
+                return searchResult[0].getValue('internalid');
+            }
+
+            return null;
+        }
+
+        /******************/
+
         // Convertir valores nulos en un objeto JavaScript a string - Al parecer FreeMarker no acepta valores nulos
         function convertObjectValuesToStrings(obj) {
             for (const key in obj) {
@@ -84,6 +111,6 @@ define(['N'],
             return `<link rel="stylesheet" href="${style}">`;
         }
 
-        return { error_log, email_log, convertObjectValuesToStrings, getDefaultStyle }
+        return { error_log, email_log, getVendorIdByRuc, convertObjectValuesToStrings, getDefaultStyle }
 
     });

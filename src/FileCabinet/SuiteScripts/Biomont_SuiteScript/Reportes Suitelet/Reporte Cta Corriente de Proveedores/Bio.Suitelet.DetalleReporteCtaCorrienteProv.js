@@ -28,7 +28,7 @@ define(['./lib/Lib.ServerWidget', './lib/Lib.ReportManager', './lib/data/Lib.Bas
 
                 ServerWidget.createReportDetailForm();
 
-                let selectedReportHtml = new ReportManager.DetalleDescuentosSobreVentas(params).print();
+                let selectedReportHtml = new ReportManager.DetalleCtaCorrienteProv(params).print();
 
                 if (params.xls == 'T') {
                     let base64fileEncodedString = encode.convert({
@@ -39,10 +39,21 @@ define(['./lib/Lib.ServerWidget', './lib/Lib.ReportManager', './lib/data/Lib.Bas
 
                     scriptContext.response.writeFile(
                         file.create({
-                            name: 'biomont_detalle_reporteDescuentoSobreVentas.xls',
+                            name: 'biomont_detalle_reporteCtaCorrienteProveedores.xls',
                             fileType: file.Type.EXCEL,
                             encoding: file.Encoding.UTF_8,
                             contents: base64fileEncodedString
+                        })
+                    )
+                } else if (params.csv == 'T') {
+                    // Helper.error_log('selectedReportHtml', selectedReportHtml);
+
+                    scriptContext.response.writeFile(
+                        file.create({
+                            name: 'biomont_detalle_reporteCtaCorrienteProveedores.csv',
+                            fileType: file.Type.CSV,
+                            encoding: file.Encoding.UTF_8,
+                            contents: selectedReportHtml
                         })
                     )
                 } else {

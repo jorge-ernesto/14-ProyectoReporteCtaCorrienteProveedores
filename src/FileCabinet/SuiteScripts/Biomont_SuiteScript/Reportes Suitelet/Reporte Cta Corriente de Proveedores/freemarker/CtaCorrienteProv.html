@@ -74,7 +74,7 @@
                     <tbody>
                         <#list context.transactions.proveedores as keyprov, proveedores>
                             <tr>
-                                <th colspan="13"><b>PROVEEDOR: ${keyprov}</b></th>
+                                <th colspan="13"><span class="bm-lbl" bm-vendor="${proveedores.detalle[0].proveedor.id_interno}"><b>PROVEEDOR: ${keyprov}</b></span></th>
                             </tr>
                             <#list proveedores.detalle as documentos>
                                 <tr>
@@ -102,7 +102,7 @@
                                 </tr>
                             </#list>
                             <tr>
-                                <td class="right" colspan="13">&nbsp;</td>
+                                <td colspan="13">&nbsp;</td>
                             </tr>
                         </#list>
 
@@ -132,15 +132,28 @@
 
                 require(['N/url'], function (url) {
 
-                    let period = node.getAttribute('bm-period');
                     let subsidiary = bmPathURI.searchParams.get('subsidiary');
+                    let dateTo = bmPathURI.searchParams.get('dateTo');
+                    let dateFrom = bmPathURI.searchParams.get('dateFrom');
+                    let vendor = node.getAttribute('bm-vendor');
+                    let currency = bmPathURI.searchParams.get('currency');
+                    let type = bmPathURI.searchParams.get('type');
+                    let status = bmPathURI.searchParams.get('status');
+                    let balance = bmPathURI.searchParams.get('balance');
 
                     let bmPathDetailsURI = url.resolveScript({
-                        deploymentId: 'customdeploy_bio_sl_repdet_dessobven',
-                        scriptId: 'customscript_bio_sl_repdet_dessobven',
+                        deploymentId: 'customdeploy_bio_sl_repdet_ctacorprov',
+                        scriptId: 'customscript_bio_sl_repdet_ctacorprov',
                         params: {
-                            period: period,
+                            report: 1,
                             subsidiary: subsidiary,
+                            dateFrom: dateFrom,
+                            dateTo: dateTo,
+                            vendor: vendor,
+                            currency: currency,
+                            type: type,
+                            status: status,
+                            balance: balance
                         }
                     });
 

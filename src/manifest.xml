@@ -12,16 +12,16 @@
       <object>custbody1</object>
       <object>cseg2</object>
       <object>custbody_ns_num_planilla_letra</object>
+      <object>custbody_ns_detraccion_date</object>
       <object>custbody_15699_exclude_from_ep_process</object>
       <object>custbody_ns_planilla_generada_letras</object>
       <object>custbody_ns_detraccion_number</object>
       <object>custbody48</object>
       <object>custbodyiqityscrappedmoved</object>
       <object>custbody_15529_vendor_entity_bank</object>
-      <object>custbody_ns_lt_fech_venc</object>
       <object>customrecord_2663_entity_bank_details</object>
-      <object>custcol_nf_apply_ret_det</object>
       <object>custbodynufocus_enlace_letra</object>
+      <object>custrecord_ns_bank_name</object>
       <object>custbody_ns_co_tretefuente</object>
       <object>custbody_my_import_declaration_num</object>
       <object>custbody_ns_doc_ref_type</object>
@@ -35,9 +35,11 @@
       <object>custbody_4599_mx_operation_type</object>
       <object>custbody_am_production_units</object>
       <object>custcol_4601_witaxline</object>
+      <object>custcol_ns_detraccion_number</object>
       <object>custbody_15529_emp_entity_bank</object>
       <object>custbody_ns_perce_detrac</object>
       <object>custbody_ns_fe_ticket_id</object>
+      <object>custcol_ns_detracc_bill</object>
       <object>customrecord_ns_tipo_documento</object>
       <object>custbodyiqfwodeliverydate</object>
       <object>custbodynufocus_id_letra_deducciones</object>
